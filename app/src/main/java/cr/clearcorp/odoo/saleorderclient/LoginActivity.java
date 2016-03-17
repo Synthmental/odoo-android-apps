@@ -3,6 +3,7 @@ package cr.clearcorp.odoo.saleorderclient;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -51,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    private static final String TEMP_URL = "http://10.1.0.127:8201";
+    public static final String PREFS_NAME = "UserPrefsFile";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -100,7 +101,57 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        // Restore preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String url = settings.getString("url", "");
+        String database = settings.getString("database", "");
+        String email = settings.getString("email", "");
+
+        if (!url.isEmpty()) {
+            mUrlView.setText(url);
+        }
+
+        if (!database.isEmpty()) {
+            mDatabaseView.setText(database);
+        }
+
+        if (!email.isEmpty()) {
+            mEmailView.setText(email);
+        }
+
     }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        // Save Preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        mUrlView = (EditText) findViewById(R.id.url);
+        mDatabaseView = (EditText) findViewById(R.id.database);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+
+        String url = mUrlView.getText().toString();
+        String database = mDatabaseView.getText().toString();
+        String email = mEmailView.getText().toString();
+
+        if (!url.isEmpty()) {
+            editor.putString("url", url);
+        }
+        if (!database.isEmpty()){
+            editor.putString("database", database);
+        }
+        if (!email.isEmpty()) {
+            editor.putString("email", email);
+        }
+
+        // Commit the edits!
+        editor.commit();
+    }
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -307,8 +358,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onConnect(Odoo odoo) {
         Log.d("Odoo", "Connected to server.");
-        /*this.mConnectedToServer = true;
-        this.mOdoo = odoo;
+        mConnectedToServer = true;
+        /*this.mOdoo = odoo;
         mAuthTask.execute();*/
     }
 
