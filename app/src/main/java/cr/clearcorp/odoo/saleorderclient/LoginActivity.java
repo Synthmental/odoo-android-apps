@@ -14,7 +14,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -30,15 +29,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import odoo.Odoo;
 import odoo.handler.OdooVersionException;
-import odoo.helper.OUser;
 import odoo.listeners.IOdooConnectionListener;
-import odoo.listeners.IOdooLoginCallback;
 import odoo.listeners.OdooError;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -54,12 +52,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
     public static final String PREFS_NAME = "UserPrefsFile";
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
     private Boolean mConnectedToServer = false;
-    private Odoo mOdoo;
 
     // UI references.
     private EditText mUrlView;
@@ -196,16 +189,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mUrlView.setError(null);
@@ -238,7 +227,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -263,16 +252,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, url, database);
-            mAuthTask.execute((Void) null);
+            //mAuthTask = new UserLoginTask(email, password, url, database);
+            //mAuthTask.execute((Void) null);
+            if (mConnectedToServer){
+                //loginProcess(this.mEmail, this.mPassword, this.mUrl, this.mDatabase);
+            }
+            else {
+                try {
+                    Odoo.createInstance(LoginActivity.this, url).setOnConnect(LoginActivity.this);
+                } catch (OdooVersionException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
+    //TODO: Verify email format or user
     private boolean isEmailValid(String email) {
-        return true;
-    }
-
-    private boolean isPasswordValid(String password) {
         return true;
     }
 
@@ -366,7 +362,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onError(OdooError odooError) {
         Log.d("Odoo", "Error connecting to server.");
-        /*this.mConnectedToServer = false;*/
+        Toast.makeText(LoginActivity.this, getString(R.string.error_no_connection), Toast.LENGTH_SHORT).show();
+        mConnectedToServer = false;
+        showProgress(false);
     }
 
     /*@Override
@@ -388,68 +386,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /*private void loginProcess(String username, String password, String url, String database) {
-        Log.d("", "Login Process");
-        Log.d("", "Processing Self Hosted Server Login");
-
-        this.mOdoo.authenticate(username, password, database, this);
-    }*/
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        private final String mUrl;
-        private final String mDatabase;
-
-        UserLoginTask(String email, String password, String url, String database) {
-            mEmail = email;
-            mPassword = password;
-            mUrl = url;
-            mDatabase = database;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            /*if (mConnectedToServer){
-                loginProcess(this.mEmail, this.mPassword, this.mUrl, this.mDatabase);
-            }
-            else {*/
-            try {
-                Odoo.createInstance(LoginActivity.this, this.mUrl).setOnConnect(LoginActivity.this);
-            } catch (OdooVersionException e) {
-                e.printStackTrace();
-            }
-            //}
-
-            // Not able to login
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
 
