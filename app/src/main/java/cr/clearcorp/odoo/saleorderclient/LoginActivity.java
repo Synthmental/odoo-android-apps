@@ -36,7 +36,9 @@ import java.util.List;
 
 import odoo.Odoo;
 import odoo.handler.OdooVersionException;
+import odoo.helper.OUser;
 import odoo.listeners.IOdooConnectionListener;
+import odoo.listeners.IOdooLoginCallback;
 import odoo.listeners.OdooError;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -44,7 +46,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, IOdooConnectionListener {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, IOdooConnectionListener, IOdooLoginCallback {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static final String PREFS_NAME = "UserPrefsFile";
 
     private Boolean mConnectedToServer = false;
+    private Odoo mOdoo;
 
     // UI references.
     private EditText mUrlView;
@@ -141,8 +144,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             editor.putString("email", email);
         }
 
-        // Commit the edits!
-        editor.commit();
+        // apply the edits!
+        editor.apply();
     }
 
 
@@ -251,13 +254,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
             //mAuthTask = new UserLoginTask(email, password, url, database);
             //mAuthTask.execute((Void) null);
             if (mConnectedToServer){
-                //loginProcess(this.mEmail, this.mPassword, this.mUrl, this.mDatabase);
+                Log.d("", "Processing Server Login");
+                mOdoo.authenticate(email, password, database, this);
             }
             else {
+                showProgress(true);
                 try {
                     Odoo.createInstance(LoginActivity.this, url).setOnConnect(LoginActivity.this);
                 } catch (OdooVersionException e) {
@@ -355,10 +359,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onConnect(Odoo odoo) {
         Log.d("Odoo", "Connected to server.");
         mConnectedToServer = true;
-        /*this.mOdoo = odoo;
-        mAuthTask.execute();*/
+        mOdoo = odoo;
+        attemptLogin();
     }
 
+    //TODO: Add odooError to inform the user
     @Override
     public void onError(OdooError odooError) {
         Log.d("Odoo", "Error connecting to server.");
@@ -367,15 +372,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         showProgress(false);
     }
 
-    /*@Override
+    @Override
     public void onLoginSuccess(Odoo odoo, OUser oUser) {
-
+        Log.d("Odoo", "Login succeded.");
     }
 
     @Override
     public void onLoginFail(OdooError odooError) {
-
-    }*/
+        Log.d("Odoo", "Error login failed.");
+    }
 
 
     private interface ProfileQuery {
