@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
     compile project(':odoo-rpc-v3')
+    compile files('libs/aXMLRPC_v1.7.2.jar')
 }

@@ -3,6 +3,7 @@ package cr.clearcorp.odoo.saleorderclient;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -31,31 +32,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import odoo.Odoo;
-import odoo.handler.OdooVersionException;
-import odoo.helper.OUser;
-import odoo.listeners.IOdooConnectionListener;
-import odoo.listeners.IOdooLoginCallback;
-import odoo.listeners.OdooError;
+import de.timroes.axmlrpc.XMLRPCCallback;
+import de.timroes.axmlrpc.XMLRPCClient;
+import de.timroes.axmlrpc.XMLRPCException;
+import de.timroes.axmlrpc.XMLRPCServerException;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, IOdooConnectionListener, IOdooLoginCallback {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, XMLRPCCallback {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
     public static final String PREFS_NAME = "UserPrefsFile";
-
-    private Boolean mConnectedToServer = false;
-    private Odoo mOdoo;
+    private static final String COMMON_URL = "/xmlrpc/2/common";
 
     // UI references.
     private EditText mUrlView;
@@ -64,6 +64,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String database;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,11 +215,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         boolean cancel = false;
         View focusView = null;
-
+        URL encoded_url = null;
 
         // Check for a valid url.
         if (TextUtils.isEmpty(url)) {
             mUrlView.setError(getString(R.string.error_field_required));
+            focusView = mUrlView;
+            cancel = true;
+        }
+        // Verify encoded URL
+        try {
+            encoded_url = new URL(url + COMMON_URL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            mUrlView.setError(getString(R.string.error_invalid_url));
             focusView = mUrlView;
             cancel = true;
         }
@@ -241,10 +252,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
         }
 
         if (cancel) {
@@ -252,28 +259,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
+            // Show a progress spinner, and make an async call to
             // perform the user login attempt.
-            //mAuthTask = new UserLoginTask(email, password, url, database);
-            //mAuthTask.execute((Void) null);
-            if (mConnectedToServer){
-                Log.d("", "Processing Server Login");
-                mOdoo.authenticate(email, password, database, this);
-            }
-            else {
-                showProgress(true);
-                try {
-                    Odoo.createInstance(LoginActivity.this, url).setOnConnect(LoginActivity.this);
-                } catch (OdooVersionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+            showProgress(true);
+            this.database = database;
+            this.password = password;
+            XMLRPCClient client = new XMLRPCClient(encoded_url);
+            client.callAsync(this, "authenticate", database, email, password, Collections.emptyMap());
 
-    //TODO: Verify email format or user
-    private boolean isEmailValid(String email) {
-        return true;
+        }
     }
 
     /**
@@ -356,32 +350,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
-    public void onConnect(Odoo odoo) {
-        Log.d("Odoo", "Connected to server.");
-        mConnectedToServer = true;
-        mOdoo = odoo;
-        attemptLogin();
-    }
-
-    //TODO: Add odooError to inform the user
-    @Override
-    public void onError(OdooError odooError) {
-        Log.d("Odoo", "Error connecting to server.");
-        Toast.makeText(LoginActivity.this, getString(R.string.error_no_connection), Toast.LENGTH_SHORT).show();
-        mConnectedToServer = false;
-        showProgress(false);
+    public void onResponse(long l, Object o) {
+        Log.d("Successful Response", "Response from server.");
+        Intent intent = new Intent(this, SaleActivity.class);
+        intent.putExtra("database", this.database);
+        intent.putExtra("password", this.password);
+        String uid = o.toString();
+        intent.putExtra("uid", uid);
+        startActivity(intent);
     }
 
     @Override
-    public void onLoginSuccess(Odoo odoo, OUser oUser) {
-        Log.d("Odoo", "Login succeded.");
+    public void onError(long l, XMLRPCException e) {
+        Log.d("Library Error", "Error on library.");
+        e.printStackTrace();
+        Toast.makeText(LoginActivity.this, R.string.error_no_connection, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onLoginFail(OdooError odooError) {
-        Log.d("Odoo", "Error login failed.");
+    public void onServerError(long l, XMLRPCServerException e) {
+        Log.d("Server Error", "Error on server.");
+        e.printStackTrace();
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
