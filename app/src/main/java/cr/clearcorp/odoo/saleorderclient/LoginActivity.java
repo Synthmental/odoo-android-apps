@@ -6,6 +6,9 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +59,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
     public static final String PREFS_NAME = "UserPrefsFile";
     private static final String COMMON_URL = "/xmlrpc/2/common";
+    private static final Integer XMLRPC_SUCCESFULL_LOGIN = 1;
+    private static final Integer XMLRPC_ERROR = 2;
+    private static final Integer XMLRPC_SERVER_ERROR = 3;
 
     // UI references.
     private EditText mUrlView;
@@ -66,11 +72,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private String database;
     private String password;
+    private String url;
+    private Handler mHandler;
 
-    @Override
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        //handler
+        mHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                // Gets the what code from the incoming Message object.
+                if (inputMessage.what == XMLRPC_ERROR){
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, R.string.error_no_connection, Toast.LENGTH_SHORT).show();
+                }
+                if (inputMessage.what == XMLRPC_SERVER_ERROR){
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, R.string.error_on_server_login, Toast.LENGTH_SHORT).show();
+                }
+                if (inputMessage.what == XMLRPC_SUCCESFULL_LOGIN){
+                    showProgress(false);
+                }
+            }
+        };
 
         // Set up the login form.
         mUrlView = (EditText) findViewById(R.id.url);
@@ -264,6 +293,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             this.database = database;
             this.password = password;
+            this.url = url;
             XMLRPCClient client = new XMLRPCClient(encoded_url);
             client.callAsync(this, "authenticate", database, email, password, Collections.emptyMap());
 
@@ -353,10 +383,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onResponse(long l, Object o) {
         Log.d("Successful Response", "Response from server.");
         Intent intent = new Intent(this, SaleActivity.class);
+        intent.putExtra("url", this.url);
         intent.putExtra("database", this.database);
         intent.putExtra("password", this.password);
-        String uid = o.toString();
+        Integer uid = Integer.valueOf(o.toString());
         intent.putExtra("uid", uid);
+        this.mHandler.sendEmptyMessage(XMLRPC_SUCCESFULL_LOGIN);
         startActivity(intent);
     }
 
@@ -364,13 +396,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onError(long l, XMLRPCException e) {
         Log.d("Library Error", "Error on library.");
         e.printStackTrace();
-        Toast.makeText(LoginActivity.this, R.string.error_no_connection, Toast.LENGTH_SHORT).show();
+        this.mHandler.sendEmptyMessage(XMLRPC_ERROR);
     }
 
     @Override
     public void onServerError(long l, XMLRPCServerException e) {
         Log.d("Server Error", "Error on server.");
         e.printStackTrace();
+        this.mHandler.sendEmptyMessage(XMLRPC_SERVER_ERROR);
     }
 
     private interface ProfileQuery {

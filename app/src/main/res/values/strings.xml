@@ -12,8 +12,10 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_url">The URL is invalid</string>
-    <string name="error_no_connection">Error connecting to server</string>
+    <string name="error_no_connection">Error connecting to server.</string>
+    <string name="error_on_server_login">Invalid login or database.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="prompt_customer">Customer</string>
 </resources>
