@@ -7,31 +7,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 import cr.clearcorp.odoo.saleorderclient.controllers.CustomerController;
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
-import de.timroes.axmlrpc.XMLRPCClient;
-import de.timroes.axmlrpc.XMLRPCException;
-import de.timroes.axmlrpc.XMLRPCServerException;
-
-import static java.util.Arrays.asList;
-
 
 public class SaleActivity extends AppCompatActivity {
-
-    //private static final String COMMON_URL = "/xmlrpc/2/common";
-    private static final String OBJECT_URL = "/xmlrpc/2/object";
 
     private String database;
     private String password;
     private String url;
     private Integer uid;
-    private AutoCompleteTextView textViewCustomer;
+    private Spinner spinnerCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +31,7 @@ public class SaleActivity extends AppCompatActivity {
         url = intent.getStringExtra("url");
         uid = intent.getIntExtra("uid", 0);
         setContentView(R.layout.activity_sale);
-        textViewCustomer = (AutoCompleteTextView) findViewById(R.id.sale_customer);
+        spinnerCustomer = (Spinner) findViewById(R.id.spinner_customer);
     }
 
     @Override
@@ -54,8 +43,8 @@ public class SaleActivity extends AppCompatActivity {
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
         ArrayAdapter<Customer> adapter;
-        adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_expandable_list_item_1, customers);
-        textViewCustomer.setAdapter(adapter);
+        adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, customers);
+        spinnerCustomer.setAdapter(adapter);
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {

@@ -20,20 +20,12 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <AutoCompleteTextView
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_customer"
-                android:id="@+id/sale_customer"
-                android:layout_weight="1"
-                android:completionThreshold="1" />
-
-            <!--<Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_customer"
-                android:id="@+id/spinner"
-                android:layout_weight="1" />-->
+                android:id="@+id/spinner_customer"
+                android:layout_weight="1" />
 
         </LinearLayout>
     </ScrollView>
