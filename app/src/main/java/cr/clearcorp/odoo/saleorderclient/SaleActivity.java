@@ -12,8 +12,10 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 
 import cr.clearcorp.odoo.saleorderclient.controllers.CustomerController;
+import cr.clearcorp.odoo.saleorderclient.controllers.PricelistController;
 import cr.clearcorp.odoo.saleorderclient.controllers.WarehouseController;
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
+import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
 import cr.clearcorp.odoo.saleorderclient.models.Warehouse;
 
 public class SaleActivity extends AppCompatActivity {
@@ -24,6 +26,7 @@ public class SaleActivity extends AppCompatActivity {
     private Integer uid;
     private Spinner spinnerCustomer;
     private Spinner spinnerWarehouse;
+    private Spinner spinnerPricelist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class SaleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sale);
         spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
         spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
+        spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);
     }
 
     @Override
@@ -45,6 +49,8 @@ public class SaleActivity extends AppCompatActivity {
         customerTask.execute();
         RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
         warehouseTask.execute();
+        RetrievePricelistIdsTask pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
+        pricelistTask.execute();
 
     }
 
@@ -58,6 +64,12 @@ public class SaleActivity extends AppCompatActivity {
         ArrayAdapter<Warehouse> adapter;
         adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, warehouses);
         spinnerWarehouse.setAdapter(adapter);
+    }
+
+    private void LoadtextViewPricelist(ArrayList<Pricelist> pricelists) {
+        ArrayAdapter<Pricelist> adapter;
+        adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, pricelists);
+        spinnerPricelist.setAdapter(adapter);
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {
@@ -115,6 +127,35 @@ public class SaleActivity extends AppCompatActivity {
 
         private ArrayList<Warehouse> LoadWarehouses(){
             return WarehouseController.readAllWarehouses(this.url, this.database, this.uid, this.password);
+        }
+    }
+
+    private class RetrievePricelistIdsTask extends AsyncTask<Void, Void, ArrayList<Pricelist>> {
+
+        private String database;
+        private Integer uid;
+        private String password;
+        private String url;
+
+        public RetrievePricelistIdsTask(String url, String database, Integer uid, String password) {
+            this.database = database;
+            this.uid = uid;
+            this.password = password;
+            this.url = url;
+        }
+
+        @Override
+        protected ArrayList<Pricelist> doInBackground(Void... params) {
+            return LoadPricelists();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Pricelist> result) {
+            LoadtextViewPricelist(result);
+        }
+
+        private ArrayList<Pricelist> LoadPricelists(){
+            return PricelistController.readAllPricelists(this.url, this.database, this.uid, this.password);
         }
     }
 }

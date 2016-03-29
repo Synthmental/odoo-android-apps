@@ -46,6 +46,13 @@
                 android:id="@+id/spinnerWarehouse"
                 android:layout_weight="1" />
 
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_customer"
+                android:id="@+id/spinnerPricelist"
+                android:layout_weight="1" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
