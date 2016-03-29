@@ -18,4 +18,5 @@
         completions."
     </string>
     <string name="prompt_customer">Customer</string>
+    <string name="prompt_reference">Reference/Description</string>
 </resources>

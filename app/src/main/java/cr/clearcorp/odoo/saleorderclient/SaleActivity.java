@@ -31,7 +31,7 @@ public class SaleActivity extends AppCompatActivity {
         url = intent.getStringExtra("url");
         uid = intent.getIntExtra("uid", 0);
         setContentView(R.layout.activity_sale);
-        spinnerCustomer = (Spinner) findViewById(R.id.spinner_customer);
+        spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
     }
 
     @Override
