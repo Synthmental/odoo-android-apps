@@ -9,40 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cr.clearcorp.odoo.saleorderclient.SaleActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_customer"
-                android:id="@+id/spinnerCustomer"
-                android:layout_weight="1" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editTextReference"
-                    android:layout_weight="1"
-                    android:hint="@string/prompt_reference"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    <fragment android:name="cr.clearcorp.odoo.saleorderclient.CustomerFragment"
+        android:id="@+id/customer_fragment"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+    <fragment android:name="cr.clearcorp.odoo.saleorderclient.LinesFragment"
+        android:id="@+id/viewer"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
 </LinearLayout>
