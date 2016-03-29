@@ -39,6 +39,13 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_customer"
+                android:id="@+id/spinnerWarehouse"
+                android:layout_weight="1" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

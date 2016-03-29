@@ -12,7 +12,9 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 
 import cr.clearcorp.odoo.saleorderclient.controllers.CustomerController;
+import cr.clearcorp.odoo.saleorderclient.controllers.WarehouseController;
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
+import cr.clearcorp.odoo.saleorderclient.models.Warehouse;
 
 public class SaleActivity extends AppCompatActivity {
 
@@ -21,6 +23,7 @@ public class SaleActivity extends AppCompatActivity {
     private String url;
     private Integer uid;
     private Spinner spinnerCustomer;
+    private Spinner spinnerWarehouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +35,29 @@ public class SaleActivity extends AppCompatActivity {
         uid = intent.getIntExtra("uid", 0);
         setContentView(R.layout.activity_sale);
         spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
+        spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        RetrieveCustomersIdsTask task = new RetrieveCustomersIdsTask(url, database, uid, password);
-        task.execute();
+        RetrieveCustomersIdsTask customerTask = new RetrieveCustomersIdsTask(url, database, uid, password);
+        customerTask.execute();
+        RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
+        warehouseTask.execute();
+
     }
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
         ArrayAdapter<Customer> adapter;
         adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, customers);
         spinnerCustomer.setAdapter(adapter);
+    }
+
+    private void LoadtextViewWarehouse(ArrayList<Warehouse> warehouses) {
+        ArrayAdapter<Warehouse> adapter;
+        adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, warehouses);
+        spinnerWarehouse.setAdapter(adapter);
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {
@@ -73,6 +86,35 @@ public class SaleActivity extends AppCompatActivity {
 
         private ArrayList<Customer> LoadCustomers(){
             return CustomerController.readAllCustomers(this.url, this.database, this.uid, this.password);
+        }
+    }
+
+    private class RetrieveWarehouseIdsTask extends AsyncTask<Void, Void, ArrayList<Warehouse>> {
+
+        private String database;
+        private Integer uid;
+        private String password;
+        private String url;
+
+        public RetrieveWarehouseIdsTask(String url, String database, Integer uid, String password) {
+            this.database = database;
+            this.uid = uid;
+            this.password = password;
+            this.url = url;
+        }
+
+        @Override
+        protected ArrayList<Warehouse> doInBackground(Void... params) {
+            return LoadWarehouses();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Warehouse> result) {
+            LoadtextViewWarehouse(result);
+        }
+
+        private ArrayList<Warehouse> LoadWarehouses(){
+            return WarehouseController.readAllWarehouses(this.url, this.database, this.uid, this.password);
         }
     }
 }
