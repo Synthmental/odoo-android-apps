@@ -1,19 +1,16 @@
 package cr.clearcorp.odoo.saleorderclient;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,6 +22,7 @@ import cr.clearcorp.odoo.saleorderclient.controllers.WarehouseController;
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
 import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
+import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
 import cr.clearcorp.odoo.saleorderclient.models.Warehouse;
 
 public class SaleActivity extends AppCompatActivity {
@@ -37,6 +35,7 @@ public class SaleActivity extends AppCompatActivity {
     private Spinner spinnerWarehouse;
     private Spinner spinnerPricelist;
     private GridView productGrid;
+    private ArrayList<SaleOrderLine> saleLines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +45,23 @@ public class SaleActivity extends AppCompatActivity {
         password = intent.getStringExtra("password");
         url = intent.getStringExtra("url");
         uid = intent.getIntExtra("uid", 0);
+        this.saleLines = new ArrayList<>();
         setContentView(R.layout.activity_sale);
-        spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
+        /*spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
         spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
-        spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);
+        spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);*/
         productGrid = (GridView) findViewById(R.id.gridViewProduct);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        RetrieveCustomersIdsTask customerTask = new RetrieveCustomersIdsTask(url, database, uid, password);
+        /*RetrieveCustomersIdsTask customerTask = new RetrieveCustomersIdsTask(url, database, uid, password);
         customerTask.execute();
         RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
         warehouseTask.execute();
         RetrievePricelistIdsTask pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
-        pricelistTask.execute();
+        pricelistTask.execute();*/
         RetrieveProductIdsTask productTask = new RetrieveProductIdsTask(url, database, uid, password);
         productTask.execute();
     }
@@ -86,8 +86,18 @@ public class SaleActivity extends AppCompatActivity {
 
     private void LoadViewProducts(ArrayList<Product> products) {
         ProductAdapter adapter;
-        adapter = new ProductAdapter(SaleActivity.this, android.R.layout.simple_list_item_1, products);
+        adapter = new ProductAdapter(SaleActivity.this, R.layout.product, products);
         productGrid.setAdapter(adapter);
+        productGrid.getCount();
+        productGrid.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+
+                Toast.makeText(SaleActivity.this, "stttytytytyt" + position,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {

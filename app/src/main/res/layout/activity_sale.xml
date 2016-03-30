@@ -10,11 +10,11 @@
     tools:context="cr.clearcorp.odoo.saleorderclient.SaleActivity">
 
 
-    <fragment android:name="cr.clearcorp.odoo.saleorderclient.CustomerFragment"
+    <!--<fragment android:name="cr.clearcorp.odoo.saleorderclient.CustomerFragment"
         android:id="@+id/customer_fragment"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" />-->
     <fragment android:name="cr.clearcorp.odoo.saleorderclient.SaleOrderLineFragment"
         android:id="@+id/sale_line_fragment"
         android:layout_weight="1"
