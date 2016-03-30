@@ -1,21 +1,30 @@
 package cr.clearcorp.odoo.saleorderclient;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import cr.clearcorp.odoo.saleorderclient.adapters.ProductAdapter;
 import cr.clearcorp.odoo.saleorderclient.controllers.CustomerController;
 import cr.clearcorp.odoo.saleorderclient.controllers.PricelistController;
+import cr.clearcorp.odoo.saleorderclient.controllers.ProductController;
 import cr.clearcorp.odoo.saleorderclient.controllers.WarehouseController;
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
 import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
+import cr.clearcorp.odoo.saleorderclient.models.Product;
 import cr.clearcorp.odoo.saleorderclient.models.Warehouse;
 
 public class SaleActivity extends AppCompatActivity {
@@ -27,6 +36,7 @@ public class SaleActivity extends AppCompatActivity {
     private Spinner spinnerCustomer;
     private Spinner spinnerWarehouse;
     private Spinner spinnerPricelist;
+    private GridView productGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,7 @@ public class SaleActivity extends AppCompatActivity {
         spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
         spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
         spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);
+        productGrid = (GridView) findViewById(R.id.gridViewProduct);
     }
 
     @Override
@@ -51,7 +62,8 @@ public class SaleActivity extends AppCompatActivity {
         warehouseTask.execute();
         RetrievePricelistIdsTask pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
         pricelistTask.execute();
-
+        RetrieveProductIdsTask productTask = new RetrieveProductIdsTask(url, database, uid, password);
+        productTask.execute();
     }
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
@@ -70,6 +82,12 @@ public class SaleActivity extends AppCompatActivity {
         ArrayAdapter<Pricelist> adapter;
         adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, pricelists);
         spinnerPricelist.setAdapter(adapter);
+    }
+
+    private void LoadViewProducts(ArrayList<Product> products) {
+        ProductAdapter adapter;
+        adapter = new ProductAdapter(SaleActivity.this, android.R.layout.simple_list_item_1, products);
+        productGrid.setAdapter(adapter);
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {
@@ -156,6 +174,35 @@ public class SaleActivity extends AppCompatActivity {
 
         private ArrayList<Pricelist> LoadPricelists(){
             return PricelistController.readAllPricelists(this.url, this.database, this.uid, this.password);
+        }
+    }
+
+    private class RetrieveProductIdsTask extends AsyncTask<Void, Void, ArrayList<Product>> {
+
+        private String database;
+        private Integer uid;
+        private String password;
+        private String url;
+
+        public RetrieveProductIdsTask(String url, String database, Integer uid, String password) {
+            this.database = database;
+            this.uid = uid;
+            this.password = password;
+            this.url = url;
+        }
+
+        @Override
+        protected ArrayList<Product> doInBackground(Void... params) {
+            return LoadProducts();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Product> result) {
+            LoadViewProducts(result);
+        }
+
+        private ArrayList<Product> LoadProducts(){
+            return ProductController.readAllProducts(this.url, this.database, this.uid, this.password);
         }
     }
 }

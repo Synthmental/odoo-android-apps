@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class LinesFragment extends Fragment {
+public class ProductFragment extends Fragment {
 
 
-    public LinesFragment() {
+    public ProductFragment() {
         // Required empty public constructor
     }
 
@@ -18,7 +18,7 @@ public class LinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_lines, container, false);
+        return inflater.inflate(R.layout.fragment_products, container, false);
     }
 
 }

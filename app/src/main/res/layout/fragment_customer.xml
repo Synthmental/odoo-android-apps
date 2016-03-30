@@ -9,7 +9,6 @@
         android:layout_height="match_parent"
         android:id="@+id/scrollView" >
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,6 +51,20 @@
                 android:hint="@string/prompt_customer"
                 android:id="@+id/spinnerPricelist"
                 android:layout_weight="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_credit"
+                android:id="@+id/buttonCredit"
+                android:layout_gravity="bottom" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_cash"
+                android:id="@+id/buttonCash"
+                android:layout_gravity="bottom" />
 
         </LinearLayout>
     </ScrollView>
