@@ -2,21 +2,21 @@ package cr.clearcorp.odoo.saleorderclient.models;
 
 public class SaleOrderLine {
 
-    protected Integer quantity;
+    protected Double quantity;
     protected Product product;
-    protected Float price;
+    protected Double price;
 
-    public SaleOrderLine(Integer quantity, Product product, Float price) {
+    public SaleOrderLine(Double quantity, Product product, Double price) {
         this.quantity = quantity;
         this.product = product;
         this.price = price;
     }
 
-    public Integer getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
@@ -28,11 +28,11 @@ public class SaleOrderLine {
         this.product = product;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

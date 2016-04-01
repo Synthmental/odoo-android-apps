@@ -19,6 +19,7 @@
     </string>
     <string name="prompt_customer">Customer</string>
     <string name="prompt_reference">Reference/Description</string>
+    <string name="prompt_lines">Products</string>
     <string name="action_credit">Credit</string>
     <string name="action_cash">Cash</string>
 </resources>

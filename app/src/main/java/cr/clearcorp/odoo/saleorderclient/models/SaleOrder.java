@@ -9,6 +9,10 @@ public class SaleOrder {
     protected Warehouse warehouse;
     protected ArrayList<SaleOrderLine> lines;
 
+    public SaleOrder(){
+        this.lines = new ArrayList<>();
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -39,6 +43,19 @@ public class SaleOrder {
 
     public void setLines(ArrayList<SaleOrderLine> lines) {
         this.lines = lines;
+    }
+
+    public void addProduct(Product product, Double price){
+        boolean flag = false;
+        for (SaleOrderLine line : this.lines) {
+            if (line.product.id == product.id){
+                line.setQuantity(line.getQuantity() + 1);
+                flag = true;
+            }
+        }
+        if (!flag){
+            lines.add(new SaleOrderLine(1.0, product, price));
+        }
     }
 
 }
