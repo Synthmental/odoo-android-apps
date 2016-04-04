@@ -7,18 +7,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/prompt_customer"/>
+        android:text="@string/prompt_customer"
+        android:textSize="@dimen/text_product_label_size" />
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_customer"
-        android:id="@+id/spinnerCustomer" />
+        android:id="@+id/spinnerCustomer"
+        android:spinnerMode="dialog"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/prompt_lines"
-        android:id="@+id/textViewLines" />
+        android:id="@+id/textViewLines"
+        android:textSize="@dimen/text_product_label_size" />
 
     <ListView
         android:layout_width="match_parent"

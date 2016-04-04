@@ -2,6 +2,7 @@ package cr.clearcorp.odoo.saleorderclient;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,6 +75,7 @@ public class SaleActivity extends AppCompatActivity {
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
         ArrayAdapter<Customer> adapter;
+        customers.add(0, new Customer(0, getResources().getString(R.string.prompt_customer_no_selection)));
         adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, customers);
         spinnerCustomer.setAdapter(adapter);
     }
@@ -97,11 +99,19 @@ public class SaleActivity extends AppCompatActivity {
         productGrid.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Product product = (Product) parent.getAdapter().getItem(position);
-                SaleActivity.this.saleOrder.addProduct(product, 0.0);
-                SaleOrderLineAdapter adapterLines = new SaleOrderLineAdapter(SaleActivity.this, R.layout.sale_line, SaleActivity.this.saleOrder.getLines());
-                SaleActivity.this.listViewLines.setAdapter(adapterLines);
-                Log.d("New Product add", product.toString());
+                Customer customer = (Customer) SaleActivity.this.spinnerCustomer.getSelectedItem();
+                if (customer.getId() == 0) {
+                Snackbar.make(findViewById(R.id.SaleCoordinatorLayout), R.string.error_no_customer,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+                }
+                else {
+                    Product product = (Product) parent.getAdapter().getItem(position);
+                    SaleActivity.this.saleOrder.addProduct(product, 0.0);
+                    SaleOrderLineAdapter adapterLines = new SaleOrderLineAdapter(SaleActivity.this, R.layout.sale_line, SaleActivity.this.saleOrder.getLines());
+                    SaleActivity.this.listViewLines.setAdapter(adapterLines);
+                    Log.d("New Product add", product.toString());
+                }
             }
         });
 

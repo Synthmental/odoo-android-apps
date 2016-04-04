@@ -54,7 +54,7 @@ public class SaleOrder {
             }
         }
         if (!flag){
-            lines.add(new SaleOrderLine(1.0, product, price));
+            lines.add(new SaleOrderLine(1.0, product, product.getUom(), price));
         }
     }
 

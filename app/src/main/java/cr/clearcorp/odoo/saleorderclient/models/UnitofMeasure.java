@@ -1,18 +1,13 @@
 package cr.clearcorp.odoo.saleorderclient.models;
 
-public class Customer {
+public class UnitofMeasure {
 
     protected Integer id;
     protected String name;
 
-    public Customer(Integer id, String name){
+    public UnitofMeasure(Integer id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
     }
 
     public Integer getId() {
@@ -29,5 +24,10 @@ public class Customer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

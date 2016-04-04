@@ -4,18 +4,27 @@ public class Product {
 
     protected Integer id;
     protected String name;
+    protected String code;
     protected String imageMedium;
+    protected UnitofMeasure uom;
 
 
-    public Product(Integer id, String name, String imageMedium){
+    public Product(Integer id, String name, String code, String imageMedium, UnitofMeasure uom){
         this.id = id;
         this.name = name;
+        this.code = code;
         this.imageMedium = imageMedium;
+        this.uom = uom;
     }
 
     @Override
     public String toString() {
-        return this.name;
+        if (!this.code.isEmpty()) {
+            return "[" + this.code + "] " + this.name;
+        }
+        else {
+            return this.name;
+        }
     }
 
     public Integer getId() {
@@ -40,5 +49,13 @@ public class Product {
 
     public void setImageMedium(String imageMedium) {
         this.imageMedium = imageMedium;
+    }
+
+    public UnitofMeasure getUom() {
+        return uom;
+    }
+
+    public void setUom(UnitofMeasure uom) {
+        this.uom = uom;
     }
 }

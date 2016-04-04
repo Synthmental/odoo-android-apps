@@ -48,6 +48,9 @@ public class SaleOrderLineAdapter extends ArrayAdapter<SaleOrderLine> {
         TextView textViewSaleProduct = (TextView) convertView.findViewById(R.id.textViewSaleProduct);
         textViewSaleProduct.setText(line.getProduct().toString());
 
+        TextView textViewSaleUom = (TextView) convertView.findViewById((R.id.textViewSaleUom));
+        textViewSaleUom.setText(line.getUom().toString());
+
         EditText textViewSalePrice = (EditText) convertView.findViewById(R.id.textViewSalePrice);
         textViewSalePrice.setText(line.getPrice().toString());
 

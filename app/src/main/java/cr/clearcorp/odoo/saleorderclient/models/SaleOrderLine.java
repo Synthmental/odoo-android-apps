@@ -4,11 +4,13 @@ public class SaleOrderLine {
 
     protected Double quantity;
     protected Product product;
+    protected UnitofMeasure uom;
     protected Double price;
 
-    public SaleOrderLine(Double quantity, Product product, Double price) {
+    public SaleOrderLine(Double quantity, Product product, UnitofMeasure uom, Double price) {
         this.quantity = quantity;
         this.product = product;
+        this.uom = uom;
         this.price = price;
     }
 
@@ -26,6 +28,14 @@ public class SaleOrderLine {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public UnitofMeasure getUom() {
+        return uom;
+    }
+
+    public void setUom(UnitofMeasure uom) {
+        this.uom = uom;
     }
 
     public Double getPrice() {
