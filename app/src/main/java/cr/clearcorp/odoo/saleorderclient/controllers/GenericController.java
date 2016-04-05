@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
@@ -53,5 +54,31 @@ public class GenericController {
         }
 
         return elements;
+    }
+
+    public static HashMap<String, Object> callMethodHash(
+            String url, String database, Integer uid, String password, String model, String method, List<Object> params) {
+
+        try {
+            URL encoded_url = new URL(url + OBJECT_URL);
+            XMLRPCClient client = new XMLRPCClient(encoded_url);
+
+            HashMap<String, Object> result = (HashMap<String, Object>) client.call("execute_kw", database, uid, password, model,
+                    method, params, new HashMap());
+
+
+            return result;
+
+        } catch(XMLRPCServerException e) {
+            // The server throw an error.
+            e.printStackTrace();
+        } catch(XMLRPCException e) {
+            // An error occured in the client.
+            e.printStackTrace();
+        } catch(Exception e) {
+            // Any other exception
+            e.printStackTrace();
+        }
+        return new HashMap<String, Object>();
     }
 }

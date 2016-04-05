@@ -58,4 +58,8 @@ public class Product {
     public void setUom(UnitofMeasure uom) {
         this.uom = uom;
     }
+
+    public Double computePrice(Pricelist pricelist){
+        return 0.0;
+    }
 }

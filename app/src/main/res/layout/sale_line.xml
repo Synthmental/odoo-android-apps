@@ -15,20 +15,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSaleQty"
-            android:textSize="@dimen/text_product_line_label_size"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:inputType="numberDecimal"
             android:layout_weight="4" />
+            <!--android:textSize="@dimen/text_product_line_label_size"-->
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSaleProduct"
-            android:textSize="@dimen/text_product_line_label_size"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:layout_weight="12" />
+            <!--android:textSize="@dimen/text_product_line_label_size"-->
 
     </LinearLayout>
 
@@ -42,29 +42,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSaleUom"
-            android:textSize="@dimen/text_product_line_label_size"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:layout_weight="4" />
+            <!--android:textSize="@dimen/text_product_line_label_size"-->
 
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSalePrice"
-            android:textSize="@dimen/text_product_line_label_size"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:inputType="numberDecimal"
             android:layout_weight="4"/>
+            <!--android:textSize="@dimen/text_product_line_label_size"-->
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSalePriceTotal"
-            android:textSize="@dimen/text_product_line_label_size"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:layout_weight="8"/>
+            <!--android:textSize="@dimen/text_product_line_label_size"-->
 
     </LinearLayout>
 

@@ -2,6 +2,8 @@ package cr.clearcorp.odoo.saleorderclient.models;
 
 import java.util.ArrayList;
 
+import cr.clearcorp.odoo.saleorderclient.controllers.PricelistController;
+
 public class SaleOrder {
 
     protected Customer customer;

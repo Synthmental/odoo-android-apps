@@ -54,8 +54,8 @@ public class SaleActivity extends AppCompatActivity {
         this.saleOrder = new SaleOrder();
         setContentView(R.layout.activity_sale);
         spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
-        /*spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
-        spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);*/
+        //spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
+        spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);
         productGrid = (GridView) findViewById(R.id.gridViewProduct);
         listViewLines = (ListView) findViewById(R.id.listViewLines);
     }
@@ -66,9 +66,9 @@ public class SaleActivity extends AppCompatActivity {
         RetrieveCustomersIdsTask customerTask = new RetrieveCustomersIdsTask(url, database, uid, password);
         customerTask.execute();
         /*RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
-        warehouseTask.execute();
+        warehouseTask.execute();*/
         RetrievePricelistIdsTask pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
-        pricelistTask.execute();*/
+        pricelistTask.execute();
         RetrieveProductIdsTask productTask = new RetrieveProductIdsTask(url, database, uid, password);
         productTask.execute();
     }
@@ -88,8 +88,16 @@ public class SaleActivity extends AppCompatActivity {
 
     private void LoadtextViewPricelist(ArrayList<Pricelist> pricelists) {
         ArrayAdapter<Pricelist> adapter;
+        pricelists.add(0, new Pricelist(0, getResources().getString(R.string.prompt_pricelist_no_selection)));
         adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, pricelists);
         spinnerPricelist.setAdapter(adapter);
+    }
+
+    private void LoadNewProduct(Product product, Double price) {
+        this.saleOrder.addProduct(product, price);
+        SaleOrderLineAdapter adapterLines = new SaleOrderLineAdapter(this, R.layout.sale_line, this.saleOrder.getLines());
+        this.listViewLines.setAdapter(adapterLines);
+        Log.d("New Product add", product.toString());
     }
 
     private void LoadViewProducts(ArrayList<Product> products) {
@@ -106,11 +114,19 @@ public class SaleActivity extends AppCompatActivity {
                         .show();
                 }
                 else {
-                    Product product = (Product) parent.getAdapter().getItem(position);
-                    SaleActivity.this.saleOrder.addProduct(product, 0.0);
-                    SaleOrderLineAdapter adapterLines = new SaleOrderLineAdapter(SaleActivity.this, R.layout.sale_line, SaleActivity.this.saleOrder.getLines());
-                    SaleActivity.this.listViewLines.setAdapter(adapterLines);
-                    Log.d("New Product add", product.toString());
+                    Pricelist pricelist = (Pricelist) SaleActivity.this.spinnerPricelist.getSelectedItem();
+                    if (pricelist.getId() == 0) {
+                        Snackbar.make(findViewById(R.id.SaleCoordinatorLayout), R.string.error_no_pricelist,
+                                Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                    else{
+                        Product product = (Product) parent.getAdapter().getItem(position);
+                        ComputePriceTask priceTask = new ComputePriceTask(SaleActivity.this.url,
+                                SaleActivity.this.database, SaleActivity.this.uid,
+                                SaleActivity.this.password, product, pricelist.getId(), 1.0);
+                        priceTask.execute();
+                    }
                 }
             }
         });
@@ -201,6 +217,43 @@ public class SaleActivity extends AppCompatActivity {
 
         private ArrayList<Pricelist> LoadPricelists(){
             return PricelistController.readAllPricelists(this.url, this.database, this.uid, this.password);
+        }
+    }
+
+    private class ComputePriceTask extends AsyncTask<Void, Void, Double> {
+
+        private String database;
+        private Integer uid;
+        private String password;
+        private String url;
+        Product product;
+        Integer pricelistId;
+        Double quantity;
+
+        public ComputePriceTask(String url, String database, Integer uid, String password,
+                                Product product, Integer pricelistId, Double quantity) {
+            this.database = database;
+            this.uid = uid;
+            this.password = password;
+            this.url = url;
+            this.product = product;
+            this.pricelistId = pricelistId;
+            this.quantity = quantity;
+        }
+
+        @Override
+        protected Double doInBackground(Void... params) {
+            return LoadPrice();
+        }
+
+        @Override
+        protected void onPostExecute(Double result) {
+            LoadNewProduct(this.product, result);
+        }
+
+        private Double LoadPrice(){
+            return PricelistController.getPrice(this.url, this.database, this.uid, this.password,
+                    this.product.getId(), this.pricelistId, this.quantity);
         }
     }
 
