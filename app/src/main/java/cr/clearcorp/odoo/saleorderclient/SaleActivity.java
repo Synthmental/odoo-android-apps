@@ -41,7 +41,7 @@ public class SaleActivity extends AppCompatActivity {
     private Spinner spinnerPricelist;
     private GridView productGrid;
     private ListView listViewLines;
-    private SaleOrder saleOrder;
+    private SaleOrderLineAdapter adapterLines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class SaleActivity extends AppCompatActivity {
         password = intent.getStringExtra("password");
         url = intent.getStringExtra("url");
         uid = intent.getIntExtra("uid", 0);
-        this.saleOrder = new SaleOrder();
         setContentView(R.layout.activity_sale);
         spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
         //spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
@@ -71,6 +70,8 @@ public class SaleActivity extends AppCompatActivity {
         pricelistTask.execute();
         RetrieveProductIdsTask productTask = new RetrieveProductIdsTask(url, database, uid, password);
         productTask.execute();
+        adapterLines = new SaleOrderLineAdapter(this, R.layout.sale_line, new ArrayList<SaleOrderLine>());
+        this.listViewLines.setAdapter(adapterLines);
     }
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
@@ -93,10 +94,26 @@ public class SaleActivity extends AppCompatActivity {
         spinnerPricelist.setAdapter(adapter);
     }
 
+    private void addProduct(Product product, Double price){
+        boolean flag = false;
+        Integer count = 0;
+        while (count < this.adapterLines.getCount()) {
+            if (this.adapterLines.getItem(count).getProduct().getId() == product.getId()){
+                this.adapterLines.getItem(count).setQuantity(this.adapterLines.getItem(count).getQuantity() + 1);
+                flag = true;
+                break;
+            }
+            count += 1;
+        }
+
+        if (!flag){
+            this.adapterLines.add(new SaleOrderLine(1.0, product, product.getUom(), price));
+        }
+    }
+
     private void LoadNewProduct(Product product, Double price) {
-        this.saleOrder.addProduct(product, price);
-        SaleOrderLineAdapter adapterLines = new SaleOrderLineAdapter(this, R.layout.sale_line, this.saleOrder.getLines());
-        this.listViewLines.setAdapter(adapterLines);
+        addProduct(product, price);
+        this.adapterLines.notifyDataSetChanged();
         Log.d("New Product add", product.toString());
     }
 

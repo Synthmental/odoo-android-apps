@@ -47,17 +47,4 @@ public class SaleOrder {
         this.lines = lines;
     }
 
-    public void addProduct(Product product, Double price){
-        boolean flag = false;
-        for (SaleOrderLine line : this.lines) {
-            if (line.product.id == product.id){
-                line.setQuantity(line.getQuantity() + 1);
-                flag = true;
-            }
-        }
-        if (!flag){
-            lines.add(new SaleOrderLine(1.0, product, product.getUom(), price));
-        }
-    }
-
 }
