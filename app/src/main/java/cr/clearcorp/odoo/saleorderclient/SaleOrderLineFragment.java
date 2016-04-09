@@ -61,17 +61,6 @@ public class SaleOrderLineFragment extends Fragment {
                 Snackbar.make(activity_view.findViewById(R.id.SaleCoordinatorLayout), "Editando linea " + String.valueOf(position),
                         Snackbar.LENGTH_SHORT)
                         .show();
-                /*// Create new fragment and transaction
-                SaleOrderLineEditFragment newFragment = new SaleOrderLineEditFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
-                transaction.replace(R.id.sale_line_fragment, newFragment);
-                transaction.addToBackStack(null);
-
-                // Commit the transaction
-                transaction.commit();*/
             }
         });
         return view;

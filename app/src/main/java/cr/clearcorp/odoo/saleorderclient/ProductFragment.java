@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,11 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 
 import cr.clearcorp.odoo.saleorderclient.adapters.ProductAdapter;
-import cr.clearcorp.odoo.saleorderclient.adapters.SaleOrderLineAdapter;
 import cr.clearcorp.odoo.saleorderclient.controllers.PricelistController;
 import cr.clearcorp.odoo.saleorderclient.controllers.ProductController;
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
 import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
-import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
 
 public class ProductFragment extends Fragment {
 
@@ -162,7 +159,6 @@ public class ProductFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Double result) {
-            //LoadNewProduct(this.product, result);
             listener.OnItemClicked(this.product, result);
         }
 

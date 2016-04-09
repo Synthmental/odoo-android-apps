@@ -7,9 +7,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -20,8 +17,6 @@ import cr.clearcorp.odoo.saleorderclient.models.Product;
 import cr.clearcorp.odoo.saleorderclient.models.Warehouse;
 
 public class SaleActivity extends AppCompatActivity implements ProductFragment.OnItemClickListener {
-
-    private Spinner spinnerWarehouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,58 +48,31 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
             transaction.add(R.id.main_sale_activity, productFragment);
             transaction.add(R.id.main_sale_activity, saleOrderLineFragment, "SaleOrderLineFragment");
             transaction.commit();
-
-            /*spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomer);
-            //spinnerWarehouse = (Spinner) findViewById(R.id.spinnerWarehouse);
-            spinnerPricelist = (Spinner) findViewById(R.id.spinnerPricelist);
-            productGrid = (GridView) findViewById(R.id.gridViewProduct);
-            listViewLines = (ListView) findViewById(R.id.listViewLines);
-            adapterLines = new SaleOrderLineAdapter(this, R.layout.sale_line, new ArrayList<SaleOrderLine>());
-            this.listViewLines.setAdapter(adapterLines);
-            this.listViewLines.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Snackbar.make(findViewById(R.id.SaleCoordinatorLayout), "Editando linea " + String.valueOf(position),
-                            Snackbar.LENGTH_SHORT)
-                            .show();
-                // Create new fragment and transaction
-                SaleOrderLineEditFragment newFragment = new SaleOrderLineEditFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
-                transaction.replace(R.id.sale_line_fragment, newFragment);
-                transaction.addToBackStack(null);
-
-                // Commit the transaction
-                transaction.commit();
-                }
-            });*/
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart(){
         super.onStart();
-        /*RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
-        warehouseTask.execute();*/
+        RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
+        warehouseTask.execute();
     }
 
     private void LoadtextViewWarehouse(ArrayList<Warehouse> warehouses) {
         ArrayAdapter<Warehouse> adapter;
         adapter = new ArrayAdapter<>(SaleActivity.this, android.R.layout.simple_spinner_dropdown_item, warehouses);
         spinnerWarehouse.setAdapter(adapter);
-    }
+    }*/
 
     @Override
     public void OnItemClicked(Product product, Double price) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         SaleOrderLineFragment fragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
         fragment.LoadNewProduct(product, price);
-        Log.d("asdasd", "adsadasd");
+        Log.d("SaleOrderLineFragment", "Product added");
     }
 
-    private class RetrieveWarehouseIdsTask extends AsyncTask<Void, Void, ArrayList<Warehouse>> {
+    /*private class RetrieveWarehouseIdsTask extends AsyncTask<Void, Void, ArrayList<Warehouse>> {
 
         private String database;
         private Integer uid;
@@ -131,5 +99,5 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
         private ArrayList<Warehouse> LoadWarehouses(){
             return WarehouseController.readAllWarehouses(this.url, this.database, this.uid, this.password);
         }
-    }
+    }*/
 }
