@@ -11,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSaleQty"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:inputType="numberDecimal"
             android:layout_weight="4" />
-            <!--android:textSize="@dimen/text_product_line_label_size"-->
+            <!--android:inputType="numberDecimal"
+            android:textSize="@dimen/text_product_line_label_size"-->
 
         <TextView
             android:layout_width="0dp"
@@ -47,15 +47,15 @@
             android:layout_weight="4" />
             <!--android:textSize="@dimen/text_product_line_label_size"-->
 
-        <EditText
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSalePrice"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:inputType="numberDecimal"
             android:layout_weight="4"/>
-            <!--android:textSize="@dimen/text_product_line_label_size"-->
+            <!--android:inputType="numberDecimal"
+            android:textSize="@dimen/text_product_line_label_size"-->
 
         <TextView
             android:layout_width="0dp"

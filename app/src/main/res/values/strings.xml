@@ -24,7 +24,7 @@
     <string name="prompt_customer_no_selection">Select a Customer</string>
     <string name="prompt_pricelist_no_selection">Select a Pricelist</string>
     <string name="prompt_reference">Reference/Description</string>
-    <string name="prompt_lines">Products</string>
+    <string name="prompt_products">Products</string>
     <string name="action_credit">Credit</string>
     <string name="action_cash">Cash</string>
 </resources>

@@ -3,7 +3,6 @@ package cr.clearcorp.odoo.saleorderclient.controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
 
 import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
 

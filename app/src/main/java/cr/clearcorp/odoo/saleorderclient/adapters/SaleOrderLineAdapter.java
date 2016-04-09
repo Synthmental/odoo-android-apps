@@ -3,6 +3,8 @@ package cr.clearcorp.odoo.saleorderclient.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,37 +30,50 @@ public class SaleOrderLineAdapter extends ArrayAdapter<SaleOrderLine> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
 
-        SaleOrderLine line = getItem(position);
+        final SaleOrderLine line = getItem(position);
+        final ViewHolder viewHolder;
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
-
+            viewHolder = new ViewHolder();
+            convertView.setTag(viewHolder);
+        }
+        else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         // Lookup view for data population
-        EditText textViewSaleQty = (EditText) convertView.findViewById(R.id.textViewSaleQty);
-        textViewSaleQty.setText(line.getQuantity().toString());
+        viewHolder.textViewSaleQty = (TextView) convertView.findViewById(R.id.textViewSaleQty);
+        viewHolder.textViewSaleQty.setText(line.getQuantity().toString());
 
-        TextView textViewSaleProduct = (TextView) convertView.findViewById(R.id.textViewSaleProduct);
-        textViewSaleProduct.setText(line.getProduct().toString());
+        viewHolder.textViewSaleProduct = (TextView) convertView.findViewById(R.id.textViewSaleProduct);
+        viewHolder.textViewSaleProduct.setText(line.getProduct().toString());
 
-        TextView textViewSaleUom = (TextView) convertView.findViewById((R.id.textViewSaleUom));
-        textViewSaleUom.setText(line.getUom().toString());
+        viewHolder.textViewSaleUom = (TextView) convertView.findViewById((R.id.textViewSaleUom));
+        viewHolder.textViewSaleUom.setText(line.getUom().toString());
 
-        EditText textViewSalePrice = (EditText) convertView.findViewById(R.id.textViewSalePrice);
-        textViewSalePrice.setText(line.getPrice().toString());
+        viewHolder.textViewSalePrice = (TextView) convertView.findViewById(R.id.textViewSalePrice);
+        viewHolder.textViewSalePrice.setText(line.getPrice().toString());
 
-        TextView textViewSalePriceTotal = (TextView) convertView.findViewById(R.id.textViewSalePriceTotal);
-        textViewSalePriceTotal.setText(String.valueOf(line.getPrice() * line.getQuantity()));
+        viewHolder.textViewSalePriceTotal = (TextView) convertView.findViewById(R.id.textViewSalePriceTotal);
+        viewHolder.textViewSalePriceTotal.setText(String.valueOf(line.getPrice() * line.getQuantity()));
 
         // Return the completed view to render on screen
         return convertView;
+
+    }
+
+    static class ViewHolder {
+        protected TextView textViewSaleQty;
+        protected TextView textViewSaleProduct;
+        protected TextView textViewSaleUom;
+        protected TextView textViewSalePrice;
+        protected TextView textViewSalePriceTotal;
 
     }
 
