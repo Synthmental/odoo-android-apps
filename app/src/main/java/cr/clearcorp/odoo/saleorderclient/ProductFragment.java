@@ -62,7 +62,7 @@ public class ProductFragment extends Fragment {
             listener = (OnItemClickListener) context;
         } else {
             throw new ClassCastException(context.toString()
-                    + " must implement MyListFragment.OnItemSelectedListener");
+                    + " must implement ProductFragment.OnItemClickListener");
         }
     }
 

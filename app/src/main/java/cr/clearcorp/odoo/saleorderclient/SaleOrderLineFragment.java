@@ -1,8 +1,8 @@
 package cr.clearcorp.odoo.saleorderclient;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +27,7 @@ import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
 
 public class SaleOrderLineFragment extends Fragment {
 
+    private OnItemClickEditListener listener;
     private String database;
     private String password;
     private String url;
@@ -57,10 +58,12 @@ public class SaleOrderLineFragment extends Fragment {
         this.listViewLines.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                View activity_view = getActivity().findViewById(R.id.SaleCoordinatorLayout);
+                /*View activity_view = getActivity().findViewById(R.id.SaleCoordinatorLayout);
                 Snackbar.make(activity_view.findViewById(R.id.SaleCoordinatorLayout), "Editando linea " + String.valueOf(position),
                         Snackbar.LENGTH_SHORT)
-                        .show();
+                        .show();*/
+                SaleOrderLine line = (SaleOrderLine) parent.getAdapter().getItem(position);
+                listener.OnItemEditClicked(line);
             }
         });
         return view;
@@ -73,6 +76,17 @@ public class SaleOrderLineFragment extends Fragment {
         customerTask.execute();
         RetrievePricelistIdsTask pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
         pricelistTask.execute();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnItemClickEditListener) {
+            listener = (OnItemClickEditListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement SaleOrderLineFragment.OnItemClickEditListener");
+        }
     }
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
@@ -113,7 +127,7 @@ public class SaleOrderLineFragment extends Fragment {
     }
 
     public interface OnItemClickEditListener {
-        public void OnItemEditClicked(Product product, Double price);
+        public void OnItemEditClicked(SaleOrderLine line);
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {

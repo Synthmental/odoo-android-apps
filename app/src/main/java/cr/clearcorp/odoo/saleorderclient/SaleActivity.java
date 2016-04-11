@@ -3,20 +3,14 @@ package cr.clearcorp.odoo.saleorderclient;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
-import java.util.ArrayList;
-
-import cr.clearcorp.odoo.saleorderclient.controllers.WarehouseController;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
-import cr.clearcorp.odoo.saleorderclient.models.Warehouse;
+import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
 
-public class SaleActivity extends AppCompatActivity implements ProductFragment.OnItemClickListener {
+public class SaleActivity extends AppCompatActivity implements ProductFragment.OnItemClickListener, SaleOrderLineFragment.OnItemClickEditListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +39,7 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
 
             // Add the fragment to the 'main_sale_activity' Layout
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.main_sale_activity, productFragment);
+            transaction.add(R.id.main_sale_activity, productFragment, "ProductFragment");
             transaction.add(R.id.main_sale_activity, saleOrderLineFragment, "SaleOrderLineFragment");
             transaction.commit();
         }
@@ -70,6 +64,19 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
         SaleOrderLineFragment fragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
         fragment.LoadNewProduct(product, price);
         Log.d("SaleOrderLineFragment", "Product added");
+    }
+
+    @Override
+    public void OnItemEditClicked(SaleOrderLine line) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ProductFragment fragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");
+
+        SaleOrderLineEditFragment saleOrderLineEditFragment = new SaleOrderLineEditFragment();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.hide(fragment);
+        transaction.add(R.id.main_sale_activity, saleOrderLineEditFragment, "SaleOrderLineEditFragment");
+        transaction.commit();
     }
 
     /*private class RetrieveWarehouseIdsTask extends AsyncTask<Void, Void, ArrayList<Warehouse>> {

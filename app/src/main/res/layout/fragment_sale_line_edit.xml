@@ -5,6 +5,14 @@
     android:orientation="vertical"
     android:weightSum="3">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewEditView"
+        android:layout_gravity="left"
+        android:layout_weight="3"
+        android:text="@string/action_cash" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="0dp"
