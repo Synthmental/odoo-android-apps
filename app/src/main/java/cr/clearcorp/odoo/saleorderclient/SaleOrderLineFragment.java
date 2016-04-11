@@ -46,9 +46,9 @@ public class SaleOrderLineFragment extends Fragment {
                              Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         this.database = bundle.getString("database");
-        password = bundle.getString("password");
-        url = bundle.getString("url");
-        uid = bundle.getInt("uid", 0);
+        this.password = bundle.getString("password");
+        this.url = bundle.getString("url");
+        this.uid = bundle.getInt("uid", 0);
         View view = inflater.inflate(R.layout.fragment_sale_line, container, false);
         this.spinnerCustomer = (Spinner) view.findViewById(R.id.spinnerCustomer);
         this.spinnerPricelist = (Spinner) view.findViewById(R.id.spinnerPricelist);
@@ -58,10 +58,6 @@ public class SaleOrderLineFragment extends Fragment {
         this.listViewLines.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*View activity_view = getActivity().findViewById(R.id.SaleCoordinatorLayout);
-                Snackbar.make(activity_view.findViewById(R.id.SaleCoordinatorLayout), "Editando linea " + String.valueOf(position),
-                        Snackbar.LENGTH_SHORT)
-                        .show();*/
                 SaleOrderLine line = (SaleOrderLine) parent.getAdapter().getItem(position);
                 listener.OnItemEditClicked(line);
             }

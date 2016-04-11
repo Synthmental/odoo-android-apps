@@ -40,9 +40,9 @@ public class ProductFragment extends Fragment {
                              Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         this.database = bundle.getString("database");
-        password = bundle.getString("password");
-        url = bundle.getString("url");
-        uid = bundle.getInt("uid", 0);
+        this.password = bundle.getString("password");
+        this.url = bundle.getString("url");
+        this.uid = bundle.getInt("uid", 0);
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         this.productGrid = (GridView) view.findViewById(R.id.gridViewProduct);
         return view;

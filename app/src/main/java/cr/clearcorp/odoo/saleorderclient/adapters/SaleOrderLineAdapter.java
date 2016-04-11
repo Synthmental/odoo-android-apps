@@ -49,7 +49,7 @@ public class SaleOrderLineAdapter extends ArrayAdapter<SaleOrderLine> {
 
         // Lookup view for data population
         viewHolder.textViewSaleQty = (TextView) convertView.findViewById(R.id.textViewSaleQty);
-        viewHolder.textViewSaleQty.setText(line.getQuantity().toString());
+        viewHolder.textViewSaleQty.setText(String.format("%.2f", line.getQuantity()));
 
         viewHolder.textViewSaleProduct = (TextView) convertView.findViewById(R.id.textViewSaleProduct);
         viewHolder.textViewSaleProduct.setText(line.getProduct().toString());
@@ -58,10 +58,10 @@ public class SaleOrderLineAdapter extends ArrayAdapter<SaleOrderLine> {
         viewHolder.textViewSaleUom.setText(line.getUom().toString());
 
         viewHolder.textViewSalePrice = (TextView) convertView.findViewById(R.id.textViewSalePrice);
-        viewHolder.textViewSalePrice.setText(line.getPrice().toString());
+        viewHolder.textViewSalePrice.setText(String.format("%.2f", line.getPrice()));
 
         viewHolder.textViewSalePriceTotal = (TextView) convertView.findViewById(R.id.textViewSalePriceTotal);
-        viewHolder.textViewSalePriceTotal.setText(String.valueOf(line.getPrice() * line.getQuantity()));
+        viewHolder.textViewSalePriceTotal.setText(String.format("%.2f", line.getPrice() * line.getQuantity()));
 
         // Return the completed view to render on screen
         return convertView;

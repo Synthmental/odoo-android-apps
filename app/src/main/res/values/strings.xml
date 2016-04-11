@@ -8,6 +8,8 @@
     <string name="prompt_url">URL</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -16,6 +18,7 @@
     <string name="error_on_server_login">Invalid login or database.</string>
     <string name="error_no_customer">Please select a customer first.</string>
     <string name="error_no_pricelist">Please select a pricelist first.</string>
+    <string name="error_already_editing">Already editing please save or cancel before proceding.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
@@ -25,6 +28,10 @@
     <string name="prompt_pricelist_no_selection">Select a Pricelist</string>
     <string name="prompt_reference">Reference/Description</string>
     <string name="prompt_products">Products</string>
+    <string name="prompt_edit_line">Edit Product</string>
+    <string name="prompt_qty">Qty</string>
+    <string name="prompt_product">Product</string>
+    <string name="prompt_uom">UoM</string>
     <string name="action_credit">Credit</string>
     <string name="action_cash">Cash</string>
 </resources>
