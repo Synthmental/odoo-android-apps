@@ -11,7 +11,8 @@ import android.util.Log;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
 import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
 
-public class SaleActivity extends AppCompatActivity implements ProductFragment.OnItemClickListener, SaleOrderLineFragment.OnItemClickEditListener {
+public class SaleActivity extends AppCompatActivity implements ProductFragment.OnItemClickListener, SaleOrderLineFragment.OnItemClickEditListener,
+SaleOrderLineEditFragment.OnActionListener {
 
     private boolean editing;
 
@@ -72,7 +73,7 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
     }
 
     @Override
-    public void OnItemEditClicked(SaleOrderLine line) {
+    public void OnItemEditClicked(SaleOrderLine line, Integer positon) {
         if (!this.editing) {
             this.editing = true;
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -81,6 +82,7 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
             SaleOrderLineEditFragment saleOrderLineEditFragment = new SaleOrderLineEditFragment();
             Bundle bundle = new Bundle();
             bundle.putAll(getIntent().getExtras());
+            bundle.putInt("position", positon);
             bundle.putDouble("qty", line.getQuantity());
             bundle.putInt("product_id", line.getProduct().getId());
             bundle.putString("product", line.getProduct().toString());
@@ -99,6 +101,35 @@ public class SaleActivity extends AppCompatActivity implements ProductFragment.O
                     Snackbar.LENGTH_SHORT)
                     .show();
         }
+    }
+
+    @Override
+    public void OnActionCancel() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ProductFragment productFragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");
+        SaleOrderLineEditFragment saleOrderLineEditFragment = (SaleOrderLineEditFragment) fragmentManager.findFragmentByTag("SaleOrderLineEditFragment");
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.hide(saleOrderLineEditFragment);
+        transaction.show(productFragment);
+        transaction.commit();
+        this.editing = false;
+    }
+
+    @Override
+    public void OnActionSave(Double qty, Double price, Integer uomId, Integer position) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
+        ProductFragment productFragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");
+        SaleOrderLineEditFragment saleOrderLineEditFragment = (SaleOrderLineEditFragment) fragmentManager.findFragmentByTag("SaleOrderLineEditFragment");
+
+        saleOrderLineFragment.UpdateAdapter(qty, price, uomId, position);
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.hide(saleOrderLineEditFragment);
+        transaction.show(productFragment);
+        transaction.commit();
+        this.editing = false;
     }
 
     /*private class RetrieveWarehouseIdsTask extends AsyncTask<Void, Void, ArrayList<Warehouse>> {

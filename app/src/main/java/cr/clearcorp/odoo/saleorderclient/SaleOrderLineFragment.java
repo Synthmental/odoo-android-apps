@@ -59,7 +59,7 @@ public class SaleOrderLineFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SaleOrderLine line = (SaleOrderLine) parent.getAdapter().getItem(position);
-                listener.OnItemEditClicked(line);
+                listener.OnItemEditClicked(line, position);
             }
         });
         return view;
@@ -122,8 +122,15 @@ public class SaleOrderLineFragment extends Fragment {
         Log.d("New Product add", product.toString());
     }
 
+    public void UpdateAdapter(Double qty, Double price, Integer uomId, Integer position) {
+        SaleOrderLine line = (SaleOrderLine) this.adapterLines.getItem(position);
+        line.setQuantity(qty);
+        line.setPrice(price);
+        this.adapterLines.notifyDataSetChanged();
+    }
+
     public interface OnItemClickEditListener {
-        public void OnItemEditClicked(SaleOrderLine line);
+        public void OnItemEditClicked(SaleOrderLine line, Integer position);
     }
 
     private class RetrieveCustomersIdsTask extends AsyncTask<Void, Void, ArrayList<Customer>> {
