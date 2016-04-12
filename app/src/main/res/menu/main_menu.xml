@@ -7,4 +7,7 @@
     <item android:id="@+id/create_new_credit"
         android:title="@string/action_credit"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/clear_sale"
+        android:title="@string/action_clear"
+        app:showAsAction="ifRoom"/>
 </menu>

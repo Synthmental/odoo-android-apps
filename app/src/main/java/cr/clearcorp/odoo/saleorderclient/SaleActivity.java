@@ -88,6 +88,10 @@ SaleOrderLineEditFragment.OnActionListener {
             case R.id.create_new_credit:
                 CreateNewCreditConfirm();
                 return true;
+            case R.id.clear_sale:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
+                saleOrderLineFragment.ClearAdapter();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -126,8 +130,15 @@ SaleOrderLineEditFragment.OnActionListener {
             so.setPricelist(saleOrderLineFragment.getPricelist());
             so.setLines(saleOrderLineFragment.getSaleOrderLines());
 
-            CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, 1);
-            saleOrderTask.execute();
+            if (so.getLines().isEmpty() || so.getCustomer().getId() == 0 || so.getPricelist().getId() == 0){
+                Snackbar.make(this.findViewById(R.id.SaleCoordinatorLayout), R.string.error_no_lines_no_pricelist_no_customer,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            }
+            else {
+                CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, 1);
+                saleOrderTask.execute();
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -143,7 +154,7 @@ SaleOrderLineEditFragment.OnActionListener {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                Log.d("OK", "OK");
+                CreateNewCredit();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -167,6 +178,16 @@ SaleOrderLineEditFragment.OnActionListener {
             so.setCustomer(saleOrderLineFragment.getCustomer());
             so.setPricelist(saleOrderLineFragment.getPricelist());
             so.setLines(saleOrderLineFragment.getSaleOrderLines());
+
+            if (so.getLines().isEmpty() || so.getCustomer().getId() == 0 || so.getPricelist().getId() == 0){
+                Snackbar.make(this.findViewById(R.id.SaleCoordinatorLayout), R.string.error_no_lines_no_pricelist_no_customer,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            }
+            else {
+                CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, 3);
+                saleOrderTask.execute();
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -188,8 +209,11 @@ SaleOrderLineEditFragment.OnActionListener {
         spinnerWarehouse.setAdapter(adapter);
     }*/
 
-    private void LoadNewSaleOrderId(String saleOrderId) {
-        Log.d("SaleID", saleOrderId);
+    private void LoadNewSaleOrderId(String saleOrderName) {
+        Log.d("SaleActivity", saleOrderName);
+        Intent intent = new Intent(this, SaleConfirmationActivity.class);
+        intent.putExtra("orderName", saleOrderName);
+        startActivity(intent);
     }
 
     @Override

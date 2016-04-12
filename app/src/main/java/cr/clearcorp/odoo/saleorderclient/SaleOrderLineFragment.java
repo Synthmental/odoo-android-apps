@@ -135,6 +135,11 @@ public class SaleOrderLineFragment extends Fragment {
         this.adapterLines.notifyDataSetChanged();
     }
 
+    public void ClearAdapter() {
+        this.adapterLines.clear();
+        this.adapterLines.notifyDataSetChanged();
+    }
+
     public Customer getCustomer() {
         return  (Customer) this.spinnerCustomer.getSelectedItem();
     }

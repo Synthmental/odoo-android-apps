@@ -25,7 +25,7 @@ public class SaleOrderController {
         return name;
     }
 
-    public static Integer createSaleOrder(String url, String database, Integer uid, String password, final SaleOrder saleOrder, Integer type){
+    public static Integer createSaleOrder(String url, String database, Integer uid, String password, final SaleOrder saleOrder, final Integer type){
 
         final ArrayList<Object> lines = new ArrayList<>();
         for (final SaleOrderLine line : saleOrder.getLines()) {
@@ -47,7 +47,7 @@ public class SaleOrderController {
                     put("pricelist_id", saleOrder.getPricelist().getId());
                     put("picking_policy", "one");
                     put("order_policy", "picking");
-                    put("payment_term", 1);
+                    put("payment_term", type);
                     put("order_line", lines);
                 }}));
         return saleId;
