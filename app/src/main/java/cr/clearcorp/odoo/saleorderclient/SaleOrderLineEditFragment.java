@@ -30,6 +30,7 @@ public class SaleOrderLineEditFragment extends Fragment {
     private TextView textViewSalePriceTotalEdit;
     private Button buttonSaleSaveEdit;
     private Button buttonSaleCancelEdit;
+    private Button buttonSaleDeleteEdit;
 
     public SaleOrderLineEditFragment() {
         // Required empty public constructor
@@ -86,6 +87,19 @@ public class SaleOrderLineEditFragment extends Fragment {
             }
         });
 
+        this.buttonSaleDeleteEdit = (Button) view.findViewById(R.id.buttonSaleDeleteEdit);
+        this.buttonSaleDeleteEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    listener.OnActionDelete(SaleOrderLineEditFragment.this.position);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return view;
     }
 
@@ -103,6 +117,7 @@ public class SaleOrderLineEditFragment extends Fragment {
     public interface OnActionListener {
         public void OnActionCancel();
         public void OnActionSave(Double qty, Double price, Integer uomId, Integer position);
+        public void OnActionDelete(Integer position);
     }
 
 }

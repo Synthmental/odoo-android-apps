@@ -123,10 +123,34 @@ public class SaleOrderLineFragment extends Fragment {
     }
 
     public void UpdateAdapter(Double qty, Double price, Integer uomId, Integer position) {
-        SaleOrderLine line = (SaleOrderLine) this.adapterLines.getItem(position);
+        SaleOrderLine line = this.adapterLines.getItem(position);
         line.setQuantity(qty);
         line.setPrice(price);
         this.adapterLines.notifyDataSetChanged();
+    }
+
+    public void DeleteAdapter(Integer position) {
+        SaleOrderLine line = this.adapterLines.getItem(position);
+        this.adapterLines.remove(line);
+        this.adapterLines.notifyDataSetChanged();
+    }
+
+    public Customer getCustomer() {
+        return  (Customer) this.spinnerCustomer.getSelectedItem();
+    }
+
+    public Pricelist getPricelist() {
+        return (Pricelist) this.spinnerPricelist.getSelectedItem();
+    }
+
+    public ArrayList<SaleOrderLine> getSaleOrderLines() {
+        ArrayList<SaleOrderLine> lines = new ArrayList<>();
+        Integer counter = 0;
+        while (counter < this.adapterLines.getCount()){
+            lines.add(this.adapterLines.getItem(counter));
+            counter += 1;
+        }
+        return lines;
     }
 
     public interface OnItemClickEditListener {

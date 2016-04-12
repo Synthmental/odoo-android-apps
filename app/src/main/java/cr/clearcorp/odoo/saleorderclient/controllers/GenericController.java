@@ -81,4 +81,30 @@ public class GenericController {
         }
         return new HashMap<String, Object>();
     }
+
+    public static Integer callMethodInteger(
+            String url, String database, Integer uid, String password, String model, String method, List<Object> params) {
+
+        try {
+            URL encoded_url = new URL(url + OBJECT_URL);
+            XMLRPCClient client = new XMLRPCClient(encoded_url);
+
+            Integer result = (Integer) client.call("execute_kw", database, uid, password, model,
+                    method, params, new HashMap());
+
+
+            return result;
+
+        } catch(XMLRPCServerException e) {
+            // The server throw an error.
+            e.printStackTrace();
+        } catch(XMLRPCException e) {
+            // An error occured in the client.
+            e.printStackTrace();
+        } catch(Exception e) {
+            // Any other exception
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

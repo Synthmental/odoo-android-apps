@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="3"
-        android:weightSum="2">
+        android:weightSum="3">
 
         <Button
             android:layout_width="0dp"
@@ -98,6 +98,13 @@
             android:layout_weight="1"
             android:id="@+id/buttonSaleCancelEdit"
             android:text="@string/action_cancel"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/buttonSaleDeleteEdit"
+            android:text="@string/action_delete"/>
 
     </LinearLayout>
 
