@@ -23,6 +23,7 @@ import cr.clearcorp.odoo.saleorderclient.models.Customer;
 import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
 import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
+import cr.clearcorp.odoo.saleorderclient.models.UnitofMeasure;
 
 
 public class SaleOrderLineFragment extends Fragment {
@@ -122,10 +123,11 @@ public class SaleOrderLineFragment extends Fragment {
         Log.d("New Product add", product.toString());
     }
 
-    public void UpdateAdapter(Double qty, Double price, Integer uomId, Integer position) {
+    public void UpdateAdapter(Double qty, Double price, UnitofMeasure uom, Integer position) {
         SaleOrderLine line = this.adapterLines.getItem(position);
         line.setQuantity(qty);
         line.setPrice(price);
+        line.setUom(uom);
         this.adapterLines.notifyDataSetChanged();
     }
 

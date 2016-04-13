@@ -19,6 +19,7 @@ import cr.clearcorp.odoo.saleorderclient.controllers.SaleOrderController;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
 import cr.clearcorp.odoo.saleorderclient.models.SaleOrder;
 import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
+import cr.clearcorp.odoo.saleorderclient.models.UnitofMeasure;
 
 public class SaleActivity extends AppCompatActivity implements ProductFragment.OnItemClickListener, SaleOrderLineFragment.OnItemClickEditListener,
 SaleOrderLineEditFragment.OnActionListener {
@@ -238,7 +239,8 @@ SaleOrderLineEditFragment.OnActionListener {
             bundle.putDouble("qty", line.getQuantity());
             bundle.putInt("product_id", line.getProduct().getId());
             bundle.putString("product", line.getProduct().toString());
-            bundle.putInt("uom", line.getUom().getId());
+            bundle.putInt("uom_id", line.getUom().getId());
+            bundle.putString("uom_name", line.getUom().getName());
             bundle.putDouble("price", line.getPrice());
             saleOrderLineEditFragment.setArguments(bundle);
 
@@ -269,13 +271,13 @@ SaleOrderLineEditFragment.OnActionListener {
     }
 
     @Override
-    public void OnActionSave(Double qty, Double price, Integer uomId, Integer position) {
+    public void OnActionSave(Double qty, Double price, UnitofMeasure uom, Integer position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
         ProductFragment productFragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");
         SaleOrderLineEditFragment saleOrderLineEditFragment = (SaleOrderLineEditFragment) fragmentManager.findFragmentByTag("SaleOrderLineEditFragment");
 
-        saleOrderLineFragment.UpdateAdapter(qty, price, uomId, position);
+        saleOrderLineFragment.UpdateAdapter(qty, price, uom, position);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.hide(saleOrderLineEditFragment);

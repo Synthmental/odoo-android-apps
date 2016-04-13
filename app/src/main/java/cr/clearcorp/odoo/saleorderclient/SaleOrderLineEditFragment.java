@@ -2,18 +2,23 @@ package cr.clearcorp.odoo.saleorderclient;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.net.DatagramPacket;
+import java.util.ArrayList;
 
-import cr.clearcorp.odoo.saleorderclient.models.SaleOrderLine;
+import cr.clearcorp.odoo.saleorderclient.controllers.UnitofMeasureController;
+import cr.clearcorp.odoo.saleorderclient.models.UnitofMeasure;
+
 
 public class SaleOrderLineEditFragment extends Fragment {
 
@@ -24,7 +29,10 @@ public class SaleOrderLineEditFragment extends Fragment {
     private Integer uid;
     private Integer position;
     private Integer product_id;
+    private Integer uomId;
+    private String uomName;
     private EditText editTextSaleQtyEdit;
+    private Spinner spinnerUoMEdit;
     private TextView textViewSaleProductEdit;
     private EditText editTextSalePriceEdit;
     private TextView textViewSalePriceTotalEdit;
@@ -45,6 +53,8 @@ public class SaleOrderLineEditFragment extends Fragment {
         this.url = bundle.getString("url");
         this.uid = bundle.getInt("uid", 0);
         this.position = bundle.getInt("position", 0);
+        this.uomId = bundle.getInt("uom_id");
+        this.uomName = bundle.getString("uom_name");
         View view = inflater.inflate(R.layout.fragment_sale_line_edit, container, false);
 
         this.textViewSaleProductEdit = (TextView) view.findViewById(R.id.textViewSaleProductEdit);
@@ -57,6 +67,8 @@ public class SaleOrderLineEditFragment extends Fragment {
 
         this.editTextSaleQtyEdit = (EditText) view.findViewById(R.id.editTextSaleQtyEdit);
         this.editTextSaleQtyEdit.setText(String.format("%.2f", qty));
+
+        this.spinnerUoMEdit = (Spinner) view.findViewById(R.id.spinnerUoMEdit);
 
         this.editTextSalePriceEdit = (EditText) view.findViewById(R.id.editTextSalePriceEdit);
         this.editTextSalePriceEdit.setText(String.format("%.2f", price));
@@ -79,7 +91,8 @@ public class SaleOrderLineEditFragment extends Fragment {
                 try {
                     Double qty = Double.parseDouble(SaleOrderLineEditFragment.this.editTextSaleQtyEdit.getText().toString());
                     Double price = Double.parseDouble(SaleOrderLineEditFragment.this.editTextSalePriceEdit.getText().toString());
-                    listener.OnActionSave(qty, price, 0, SaleOrderLineEditFragment.this.position);
+                    listener.OnActionSave(qty, price, (UnitofMeasure) SaleOrderLineEditFragment.this.spinnerUoMEdit.getSelectedItem(),
+                            SaleOrderLineEditFragment.this.position);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -104,6 +117,13 @@ public class SaleOrderLineEditFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        RetrieveUnitofMeasureIdsTask unitofMeasureTask = new RetrieveUnitofMeasureIdsTask(url, database, uid, password, new UnitofMeasure(this.uomId, this.uomName));
+        unitofMeasureTask.execute();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnActionListener) {
@@ -114,10 +134,48 @@ public class SaleOrderLineEditFragment extends Fragment {
         }
     }
 
+    public void LoadSpinnerUnitofMeasure(ArrayList<UnitofMeasure> unitofMeasures) {
+        ArrayAdapter<UnitofMeasure> adapter;
+        unitofMeasures.add(0, new UnitofMeasure(this.uomId, this.uomName));
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, unitofMeasures);
+        this.spinnerUoMEdit.setAdapter(adapter);
+    }
+
     public interface OnActionListener {
         public void OnActionCancel();
-        public void OnActionSave(Double qty, Double price, Integer uomId, Integer position);
+        public void OnActionSave(Double qty, Double price, UnitofMeasure uom, Integer position);
         public void OnActionDelete(Integer position);
+    }
+
+    private class RetrieveUnitofMeasureIdsTask extends AsyncTask<Void, Void, ArrayList<UnitofMeasure>> {
+
+        private String database;
+        private Integer uid;
+        private String password;
+        private String url;
+        private UnitofMeasure uoM;
+
+        public RetrieveUnitofMeasureIdsTask(String url, String database, Integer uid, String password, UnitofMeasure uoM) {
+            this.database = database;
+            this.uid = uid;
+            this.password = password;
+            this.url = url;
+            this.uoM = uoM;
+        }
+
+        @Override
+        protected ArrayList<UnitofMeasure> doInBackground(Void... params) {
+            return LoadUnitofMeasures();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<UnitofMeasure> result) {
+            LoadSpinnerUnitofMeasure(result);
+        }
+
+        private ArrayList<UnitofMeasure> LoadUnitofMeasures(){
+            return UnitofMeasureController.readAllUoMFromCategory(this.url, this.database, this.uid, this.password, this.uoM);
+        }
     }
 
 }

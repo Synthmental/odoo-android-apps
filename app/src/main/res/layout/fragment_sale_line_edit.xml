@@ -49,14 +49,16 @@
             android:layout_weight="1"
             android:inputType="numberDecimal"/>
 
-        <TextView
+        <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewSaleUomEdit"
+            android:id="@+id/spinnerUoMEdit"
+            android:spinnerMode="dropdown"
             android:layout_gravity="center_vertical|start"
             android:textAlignment="center"
             android:hint="@string/prompt_uom"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
 
         <EditText
             android:layout_width="0dp"
