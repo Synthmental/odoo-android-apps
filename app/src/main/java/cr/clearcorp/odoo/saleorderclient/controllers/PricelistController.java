@@ -17,12 +17,14 @@ public class PricelistController {
         ArrayList<HashMap<String, Object>> elements = GenericController.readAll(url, database, uid,
                 password, MODEL, asList(Collections.emptyList()),
                 new HashMap() {{
-                    put("fields", asList("id", "name"));
+                    put("fields", asList("id", "name", "currency_id"));
                 }});
 
         ArrayList<Pricelist> pricelists = new ArrayList<>();
         for (final HashMap<String, Object> object : elements){
-            pricelists.add(new Pricelist((Integer)object.get("id"), (String)object.get("name")));
+            Object[] currency = (Object[]) object.get("currency_id");
+            String currencyName = (String) currency[1];
+            pricelists.add(new Pricelist((Integer)object.get("id"), (String)object.get("name") + " (" + currencyName + ")"));
         }
 
         return pricelists;
