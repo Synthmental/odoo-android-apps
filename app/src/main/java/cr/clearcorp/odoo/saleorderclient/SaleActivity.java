@@ -93,6 +93,8 @@ SaleOrderLineEditFragment.OnActionListener {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
                 saleOrderLineFragment.ClearAdapter();
+                saleOrderLineFragment.ClearCustomer();
+                saleOrderLineFragment.ClearPricelist();
             default:
                 return super.onOptionsItemSelected(item);
         }

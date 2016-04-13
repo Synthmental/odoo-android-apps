@@ -15,7 +15,7 @@ public class PricelistController {
     public static ArrayList<Pricelist> readAllPricelists(String url, String database, Integer uid, String password) {
 
         ArrayList<HashMap<String, Object>> elements = GenericController.readAll(url, database, uid,
-                password, MODEL, asList(Collections.emptyList()),
+                password, MODEL, asList(asList(asList("type", "=", "sale"))),
                 new HashMap() {{
                     put("fields", asList("id", "name", "currency_id"));
                 }});

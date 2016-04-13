@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cr.clearcorp.odoo.saleorderclient.models.Customer;
+import cr.clearcorp.odoo.saleorderclient.models.Pricelist;
 
 import static java.util.Arrays.asList;
 
@@ -16,12 +17,17 @@ public class CustomerController {
         ArrayList<HashMap<String, Object>> elements = GenericController.readAll(url, database, uid,
                 password, MODEL, asList(asList(asList("customer", "=", true))),
                 new HashMap() {{
-                    put("fields", asList("id", "name"));
+                    put("fields", asList("id", "full_app_name", "property_product_pricelist"));
                 }});
 
         ArrayList<Customer> customers = new ArrayList<>();
         for (final HashMap<String, Object> object : elements){
-            customers.add(new Customer((Integer)object.get("id"), (String)object.get("name")));
+            Object[] pricelistArray = (Object[]) object.get("property_product_pricelist");
+            Integer pricelistId = (Integer) pricelistArray[0];
+            String pricelistName = (String) pricelistArray[1];
+            Customer customer = new Customer((Integer)object.get("id"), (String)object.get("full_app_name"));
+            customer.setPricelist(new Pricelist(pricelistId, pricelistName));
+            customers.add(customer);
         }
 
         return customers;

@@ -43,7 +43,7 @@ public class SaleOrderLineFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         this.database = bundle.getString("database");
@@ -52,6 +52,32 @@ public class SaleOrderLineFragment extends Fragment {
         this.uid = bundle.getInt("uid", 0);
         View view = inflater.inflate(R.layout.fragment_sale_line, container, false);
         this.spinnerCustomer = (Spinner) view.findViewById(R.id.spinnerCustomer);
+        this.spinnerCustomer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Customer customer = (Customer) SaleOrderLineFragment.this.spinnerCustomer.getItemAtPosition(position);
+                Integer counter = 0;
+                boolean flag = false;
+                while (counter < SaleOrderLineFragment.this.spinnerPricelist.getCount()) {
+                    Pricelist pricelist = (Pricelist) SaleOrderLineFragment.this.spinnerPricelist.getItemAtPosition(counter);
+                    if (customer.getPricelist() != null){
+                        if (pricelist.getId() == customer.getPricelist().getId()){
+                            flag = true;
+                            break;
+                        }
+                    }
+                    counter += 1;
+                }
+                if (flag) {
+                    SaleOrderLineFragment.this.spinnerPricelist.setSelection(counter);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("SaleOrderLineFragment", "Nothing selected");
+            }
+        });
         this.spinnerPricelist = (Spinner) view.findViewById(R.id.spinnerPricelist);
         listViewLines = (ListView) view.findViewById(R.id.listViewLines);
         adapterLines = new SaleOrderLineAdapter(getContext(), R.layout.sale_line, new ArrayList<SaleOrderLine>());
@@ -140,6 +166,14 @@ public class SaleOrderLineFragment extends Fragment {
     public void ClearAdapter() {
         this.adapterLines.clear();
         this.adapterLines.notifyDataSetChanged();
+    }
+
+    public void ClearCustomer() {
+        this.spinnerCustomer.setSelection(0);
+    }
+
+    public void ClearPricelist() {
+        this.spinnerPricelist.setSelection(0);
     }
 
     public Customer getCustomer() {

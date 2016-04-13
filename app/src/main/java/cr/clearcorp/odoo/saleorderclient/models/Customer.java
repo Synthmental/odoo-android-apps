@@ -4,10 +4,12 @@ public class Customer {
 
     protected Integer id;
     protected String name;
+    protected Pricelist pricelist;
 
     public Customer(Integer id, String name){
         this.id = id;
         this.name = name;
+        this.pricelist = null;
     }
 
     @Override
@@ -29,5 +31,13 @@ public class Customer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Pricelist getPricelist() {
+        return pricelist;
+    }
+
+    public void setPricelist(Pricelist pricelist) {
+        this.pricelist = pricelist;
     }
 }
