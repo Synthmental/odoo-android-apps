@@ -65,8 +65,8 @@ SaleOrderLineEditFragment.OnActionListener {
 
             // Add the fragment to the 'main_sale_activity' Layout
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.main_sale_activity, productFragment, "ProductFragment");
             transaction.add(R.id.main_sale_activity, saleOrderLineFragment, "SaleOrderLineFragment");
+            transaction.add(R.id.main_sale_activity, productFragment, "ProductFragment");
             transaction.commit();
         }
     }
