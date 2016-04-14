@@ -23,8 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SaleActivity" />
-        <activity android:name=".SaleConfirmationActivity"></activity>
+        <activity android:name=".SaleActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity android:name=".SaleConfirmationActivity"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package cr.clearcorp.odoo.saleorderclient.controllers;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,7 +84,7 @@ public class GenericController {
     }
 
     public static Integer callMethodInteger(
-            String url, String database, Integer uid, String password, String model, String method, List<Object> params) {
+            String url, String database, Integer uid, String password, String model, String method, List<Object> params) throws Exception {
 
         try {
             URL encoded_url = new URL(url + OBJECT_URL);
@@ -97,14 +98,13 @@ public class GenericController {
 
         } catch(XMLRPCServerException e) {
             // The server throw an error.
-            e.printStackTrace();
+            throw e;
         } catch(XMLRPCException e) {
             // An error occured in the client.
-            e.printStackTrace();
+            throw e;
         } catch(Exception e) {
             // Any other exception
-            e.printStackTrace();
+            throw e;
         }
-        return 0;
     }
 }

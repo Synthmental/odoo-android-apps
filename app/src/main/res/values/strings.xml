@@ -12,6 +12,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_clear">Clear</string>
     <string name="action_delete">Delete</string>
+    <string name="action_new_so">New Sale Order</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -35,8 +36,7 @@
     <string name="prompt_qty">Qty</string>
     <string name="prompt_product">Product</string>
     <string name="prompt_uom">UoM</string>
-    <string name="action_credit">Credit</string>
-    <string name="action_cash">Cash</string>
+    <string name="action_new">Create</string>
     <string name="dialog_title">Continue</string>
     <string name="dialog_message">Are you sure you want to continue?</string>
     <string name="ok">OK</string>

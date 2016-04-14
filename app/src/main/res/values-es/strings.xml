@@ -12,6 +12,7 @@
     <string name="action_cancel">Cancelar</string>
     <string name="action_clear">Limpiar</string>
     <string name="action_delete">Borrar</string>
+    <string name="action_new_so">Nuevo pedido de venta</string>
     <string name="error_invalid_password">Esta contraseña es muy corta</string>
     <string name="error_incorrect_password">Esta contraseña es incorrecta</string>
     <string name="error_field_required">Este campo es requerido</string>
@@ -33,8 +34,7 @@
     <string name="prompt_qty">Cant</string>
     <string name="prompt_product">Producto</string>
     <string name="prompt_uom">UdM</string>
-    <string name="action_credit">Crédito</string>
-    <string name="action_cash">Contado</string>
+    <string name="action_new">Crear</string>
     <string name="dialog_title">Continuar</string>
     <string name="dialog_message">¿Estás seguro que deseas continuar?</string>
     <string name="ok">Aceptar</string>

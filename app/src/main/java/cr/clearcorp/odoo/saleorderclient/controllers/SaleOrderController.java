@@ -25,7 +25,7 @@ public class SaleOrderController {
         return name;
     }
 
-    public static Integer createSaleOrder(String url, String database, Integer uid, String password, final SaleOrder saleOrder, final Integer type){
+    public static Integer createSaleOrder(String url, String database, Integer uid, String password, final SaleOrder saleOrder, final Integer type) throws Exception {
 
         final ArrayList<Object> lines = new ArrayList<>();
         for (final SaleOrderLine line : saleOrder.getLines()) {
@@ -38,18 +38,23 @@ public class SaleOrderController {
             }}));
         }
 
-        Integer saleId = GenericController.callMethodInteger(
-                url, database, uid, password, MODEL, "create", asList((Object) new HashMap() {{
-                    put("partner_id", saleOrder.getCustomer().getId());
-                    put("partner_invoice_id", saleOrder.getCustomer().getId());
-                    put("partner_shipping_id", saleOrder.getCustomer().getId());
-                    put("warehouse_id", 1);
-                    put("pricelist_id", saleOrder.getPricelist().getId());
-                    put("picking_policy", "one");
-                    put("order_policy", "picking");
-                    put("payment_term", type);
-                    put("order_line", lines);
-                }}));
-        return saleId;
+        try {
+            Integer saleId = GenericController.callMethodInteger(
+                    url, database, uid, password, MODEL, "create", asList((Object) new HashMap() {{
+                        put("partner_id", saleOrder.getCustomer().getId());
+                        put("partner_invoice_id", saleOrder.getCustomer().getId());
+                        put("partner_shipping_id", saleOrder.getCustomer().getId());
+                        put("warehouse_id", 1);
+                        put("pricelist_id", saleOrder.getPricelist().getId());
+                        put("picking_policy", "one");
+                        put("order_policy", "picking");
+                        put("payment_term", type);
+                        put("order_line", lines);
+                    }}));
+            return saleId;
+        }
+        catch (Exception e){
+            throw e;
+        }
     }
 }

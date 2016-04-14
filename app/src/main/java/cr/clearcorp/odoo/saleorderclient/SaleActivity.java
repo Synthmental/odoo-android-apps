@@ -83,11 +83,8 @@ SaleOrderLineEditFragment.OnActionListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.create_new_cash:
-                CreateNewCashConfirm();
-                return true;
-            case R.id.create_new_credit:
-                CreateNewCreditConfirm();
+            case R.id.create_new:
+                CreateNewConfirm();
                 return true;
             case R.id.clear_sale:
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -100,7 +97,7 @@ SaleOrderLineEditFragment.OnActionListener {
         }
     }
 
-    public void CreateNewCashConfirm() {
+    public void CreateNewConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.dialog_message)
                 .setTitle(R.string.dialog_title);
@@ -108,7 +105,7 @@ SaleOrderLineEditFragment.OnActionListener {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                CreateNewCash();
+                CreateNew();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -122,7 +119,7 @@ SaleOrderLineEditFragment.OnActionListener {
         dialog.show();
     }
 
-    public void CreateNewCash() {
+    public void CreateNew() {
         try {
             SaleOrder so = new SaleOrder();
 
@@ -139,7 +136,7 @@ SaleOrderLineEditFragment.OnActionListener {
                         .show();
             }
             else {
-                CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, 1);
+                CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, so.getCustomer().getPaymentTermId());
                 saleOrderTask.execute();
             }
         }
@@ -148,53 +145,10 @@ SaleOrderLineEditFragment.OnActionListener {
         }
     }
 
-    public void CreateNewCreditConfirm(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.dialog_message)
-                .setTitle(R.string.dialog_title);
-
-        // Add the buttons
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-                CreateNewCredit();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-                Log.d("Cancel", "Cancel");
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    public void CreateNewCredit() {
-        try {
-            SaleOrder so = new SaleOrder();
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
-
-            so.setCustomer(saleOrderLineFragment.getCustomer());
-            so.setPricelist(saleOrderLineFragment.getPricelist());
-            so.setLines(saleOrderLineFragment.getSaleOrderLines());
-
-            if (so.getLines().isEmpty() || so.getCustomer().getId() == 0 || so.getPricelist().getId() == 0){
-                Snackbar.make(this.findViewById(R.id.SaleCoordinatorLayout), R.string.error_no_lines_no_pricelist_no_customer,
-                        Snackbar.LENGTH_LONG)
-                        .show();
-            }
-            else {
-                CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, 3);
-                saleOrderTask.execute();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void DisplaySaleOrderCreateException(Exception e){
+        Snackbar.make(this.findViewById(R.id.SaleCoordinatorLayout), e.getMessage(),
+                Snackbar.LENGTH_LONG)
+                .show();
     }
 
     /*@Override
@@ -203,8 +157,6 @@ SaleOrderLineEditFragment.OnActionListener {
         RetrieveWarehouseIdsTask warehouseTask = new RetrieveWarehouseIdsTask(url, database, uid, password);
         warehouseTask.execute();
     }
-
-
 
     private void LoadtextViewWarehouse(ArrayList<Warehouse> warehouses) {
         ArrayAdapter<Warehouse> adapter;
@@ -329,12 +281,25 @@ SaleOrderLineEditFragment.OnActionListener {
 
         @Override
         protected void onPostExecute(String result) {
-            LoadNewSaleOrderId(result);
+            if (!result.isEmpty()) {
+                LoadNewSaleOrderId(result);
+            }
         }
 
         private String CreateSaleOrder(){
-            Integer saleOrderId = SaleOrderController.createSaleOrder(this.url, this.database, this.uid, this.password, this.saleOrder, this.type);
-            return SaleOrderController.readName(this.url, this.database, this.uid, this.password, saleOrderId);
+            try {
+                Integer saleOrderId = SaleOrderController.createSaleOrder(this.url, this.database, this.uid, this.password, this.saleOrder, this.type);
+                if (saleOrderId != 0) {
+                    return SaleOrderController.readName(this.url, this.database, this.uid, this.password, saleOrderId);
+                }
+                else {
+                    return "";
+                }
+            }
+            catch (Exception e){
+                DisplaySaleOrderCreateException(e);
+                return "";
+            }
         }
     }
 

@@ -4,12 +4,14 @@ public class Customer {
 
     protected Integer id;
     protected String name;
+    protected Integer paymentTermId;
     protected Pricelist pricelist;
 
-    public Customer(Integer id, String name){
+    public Customer(Integer id, String name, Integer paymentTermId){
         this.id = id;
         this.name = name;
         this.pricelist = null;
+        this.paymentTermId = paymentTermId;
     }
 
     @Override
@@ -31,6 +33,14 @@ public class Customer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getPaymentTermId() {
+        return paymentTermId;
+    }
+
+    public void setPaymentTermId(Integer paymentTermId) {
+        this.paymentTermId = paymentTermId;
     }
 
     public Pricelist getPricelist() {

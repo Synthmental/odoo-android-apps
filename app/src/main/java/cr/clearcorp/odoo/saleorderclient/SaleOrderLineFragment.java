@@ -102,6 +102,14 @@ public class SaleOrderLineFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ClearAdapter();
+        ClearCustomer();
+        ClearPricelist();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnItemClickEditListener) {
@@ -114,7 +122,7 @@ public class SaleOrderLineFragment extends Fragment {
 
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
         ArrayAdapter<Customer> adapter;
-        customers.add(0, new Customer(0, getResources().getString(R.string.prompt_customer_no_selection)));
+        customers.add(0, new Customer(0, getResources().getString(R.string.prompt_customer_no_selection), 0));
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, customers);
         spinnerCustomer.setAdapter(adapter);
     }
