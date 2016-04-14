@@ -29,14 +29,20 @@ public class SaleOrderController {
 
         final ArrayList<Object> lines = new ArrayList<>();
         for (final SaleOrderLine line : saleOrder.getLines()) {
+            final ArrayList<Object> taxes = new ArrayList<>();
+            for (final Integer tax_id : line.getProduct().getTaxes()){
+                taxes.add(asList(4, tax_id, false));
+            }
             lines.add(asList(0, false, new HashMap() {{
                 put("product_id", line.getProduct().getId());
                 put("name", line.getProduct().toString());
                 put("product_uom_qty", line.getQuantity());
                 put("product_uom", line.getUom().getId());
                 put("price_unit", line.getPrice());
+                put("tax_id", taxes);
             }}));
         }
+
 
         try {
             Integer saleId = GenericController.callMethodInteger(

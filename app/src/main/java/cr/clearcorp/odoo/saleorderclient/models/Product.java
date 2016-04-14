@@ -1,5 +1,7 @@
 package cr.clearcorp.odoo.saleorderclient.models;
 
+import java.util.ArrayList;
+
 public class Product {
 
     protected Integer id;
@@ -7,6 +9,7 @@ public class Product {
     protected String code;
     protected String imageMedium;
     protected UnitofMeasure uom;
+    protected ArrayList<Integer> taxes;
 
 
     public Product(Integer id, String name, String code, String imageMedium, UnitofMeasure uom){
@@ -15,6 +18,7 @@ public class Product {
         this.code = code;
         this.imageMedium = imageMedium;
         this.uom = uom;
+        this.taxes = new ArrayList<>();
     }
 
     @Override
@@ -57,6 +61,14 @@ public class Product {
 
     public void setUom(UnitofMeasure uom) {
         this.uom = uom;
+    }
+
+    public ArrayList<Integer> getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(ArrayList<Integer> taxes) {
+        this.taxes = taxes;
     }
 
     public Double computePrice(Pricelist pricelist){

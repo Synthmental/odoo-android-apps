@@ -20,7 +20,7 @@ public class ProductController {
         ArrayList<HashMap<String, Object>> elements = GenericController.readAll(url, database, uid,
                 password, MODEL, asList(Collections.emptyList()),
                 new HashMap() {{
-                    put("fields", asList("id", "name", "code", "image_medium", "uom_id"));
+                    put("fields", asList("id", "name", "code", "image_medium", "uom_id", "taxes_id"));
                 }});
 
         ArrayList<Product> products = new ArrayList<>();
@@ -39,7 +39,7 @@ public class ProductController {
                 imageMedium = (String) object.get("image_medium");
             }
             catch (Exception e) {
-                Log.e("Image","Product has no image");
+                Log.e("Image", "Product has no image");
             }
 
             Integer uomId;
@@ -54,7 +54,21 @@ public class ProductController {
                 continue;
             }
 
-            products.add(new Product(id, name, code, imageMedium, new UnitofMeasure(uomId, uomName)));
+            ArrayList<Integer> taxes_ids = new ArrayList<>();
+            try {
+                Object[] taxes = (Object[]) object.get("taxes_id");
+                for (Object tax : taxes){
+                    taxes_ids.add((Integer) tax);
+                }
+            }
+            catch (Exception e){
+                Log.d("Taxes", "Invalid taxes");
+                continue;
+            }
+
+            Product product = new Product(id, name, code, imageMedium, new UnitofMeasure(uomId, uomName));
+            product.setTaxes(taxes_ids);
+            products.add(product);
         }
 
         return products;
