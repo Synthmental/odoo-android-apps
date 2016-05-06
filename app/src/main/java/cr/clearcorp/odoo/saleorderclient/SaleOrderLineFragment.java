@@ -12,7 +12,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.ArrayList;
 
@@ -33,8 +35,9 @@ public class SaleOrderLineFragment extends Fragment {
     private String password;
     private String url;
     private Integer uid;
-    private Spinner spinnerCustomer;
-    private Spinner spinnerPricelist;
+    private TextView textViewTotal;
+    private SearchableSpinner spinnerCustomer;
+    private SearchableSpinner spinnerPricelist;
     private SaleOrderLineAdapter adapterLines;
     private ListView listViewLines;
 
@@ -51,7 +54,10 @@ public class SaleOrderLineFragment extends Fragment {
         this.url = bundle.getString("url");
         this.uid = bundle.getInt("uid", 0);
         View view = inflater.inflate(R.layout.fragment_sale_line, container, false);
-        this.spinnerCustomer = (Spinner) view.findViewById(R.id.spinnerCustomer);
+        this.textViewTotal = (TextView) view.findViewById(R.id.textViewTotal);
+        this.spinnerCustomer = (SearchableSpinner) view.findViewById(R.id.spinnerCustomer);
+        this.spinnerCustomer.setTitle(getResources().getString(R.string.prompt_customer_no_selection));
+        this.spinnerCustomer.setPositiveButton(getResources().getString(R.string.ok));
         this.spinnerCustomer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -60,8 +66,8 @@ public class SaleOrderLineFragment extends Fragment {
                 boolean flag = false;
                 while (counter < SaleOrderLineFragment.this.spinnerPricelist.getCount()) {
                     Pricelist pricelist = (Pricelist) SaleOrderLineFragment.this.spinnerPricelist.getItemAtPosition(counter);
-                    if (customer.getPricelist() != null){
-                        if (pricelist.getId() == customer.getPricelist().getId()){
+                    if (customer.getPricelist() != null) {
+                        if (pricelist.getId() == customer.getPricelist().getId()) {
                             flag = true;
                             break;
                         }
@@ -78,7 +84,9 @@ public class SaleOrderLineFragment extends Fragment {
                 Log.d("SaleOrderLineFragment", "Nothing selected");
             }
         });
-        this.spinnerPricelist = (Spinner) view.findViewById(R.id.spinnerPricelist);
+        this.spinnerPricelist = (SearchableSpinner) view.findViewById(R.id.spinnerPricelist);
+        this.spinnerPricelist.setTitle(getResources().getString(R.string.prompt_pricelist_no_selection));
+        this.spinnerPricelist.setPositiveButton(getResources().getString(R.string.ok));
         listViewLines = (ListView) view.findViewById(R.id.listViewLines);
         adapterLines = new SaleOrderLineAdapter(getContext(), R.layout.sale_line, new ArrayList<SaleOrderLine>());
         this.listViewLines.setAdapter(adapterLines);
@@ -107,6 +115,7 @@ public class SaleOrderLineFragment extends Fragment {
         ClearAdapter();
         ClearCustomer();
         ClearPricelist();
+        ClearTotal();
     }
 
     @Override
@@ -149,6 +158,18 @@ public class SaleOrderLineFragment extends Fragment {
         if (!flag){
             this.adapterLines.add(new SaleOrderLine(1.0, product, product.getUom(), price));
         }
+        updateTotal();
+    }
+
+    private void updateTotal(){
+        Double total = 0.0;
+        Integer count = 0;
+        while (count < this.adapterLines.getCount()) {
+            SaleOrderLine line = this.adapterLines.getItem(count);
+            total = total + (line.getQuantity() * line.getPrice());
+            count += 1;
+        }
+        this.textViewTotal.setText(String.format(getResources().getString(R.string.prompt_total) + ": " + "%.2f", total));
     }
 
     public void LoadNewProduct(Product product, Double price) {
@@ -182,6 +203,10 @@ public class SaleOrderLineFragment extends Fragment {
 
     public void ClearPricelist() {
         this.spinnerPricelist.setSelection(0);
+    }
+
+    public void ClearTotal() {
+        this.textViewTotal.setText("");
     }
 
     public Customer getCustomer() {

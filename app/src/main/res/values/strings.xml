@@ -36,6 +36,7 @@
     <string name="prompt_qty">Qty</string>
     <string name="prompt_product">Product</string>
     <string name="prompt_uom">UoM</string>
+    <string name="prompt_total">Total</string>
     <string name="action_new">Create</string>
     <string name="dialog_title">Continue</string>
     <string name="dialog_message">Are you sure you want to continue?</string>

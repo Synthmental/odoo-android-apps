@@ -2,6 +2,7 @@ package cr.clearcorp.odoo.saleorderclient;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import cr.clearcorp.odoo.saleorderclient.controllers.SaleOrderController;
 import cr.clearcorp.odoo.saleorderclient.models.Product;
@@ -92,6 +94,7 @@ SaleOrderLineEditFragment.OnActionListener {
                 saleOrderLineFragment.ClearAdapter();
                 saleOrderLineFragment.ClearCustomer();
                 saleOrderLineFragment.ClearPricelist();
+                saleOrderLineFragment.ClearTotal();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -213,6 +216,9 @@ SaleOrderLineEditFragment.OnActionListener {
 
     @Override
     public void OnActionCancel() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         ProductFragment productFragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");
         SaleOrderLineEditFragment saleOrderLineEditFragment = (SaleOrderLineEditFragment) fragmentManager.findFragmentByTag("SaleOrderLineEditFragment");
@@ -226,6 +232,9 @@ SaleOrderLineEditFragment.OnActionListener {
 
     @Override
     public void OnActionSave(Double qty, Double price, UnitofMeasure uom, Integer position) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
         ProductFragment productFragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");
@@ -242,6 +251,9 @@ SaleOrderLineEditFragment.OnActionListener {
 
     @Override
     public void OnActionDelete(Integer position) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         SaleOrderLineFragment saleOrderLineFragment = (SaleOrderLineFragment) fragmentManager.findFragmentByTag("SaleOrderLineFragment");
         ProductFragment productFragment = (ProductFragment) fragmentManager.findFragmentByTag("ProductFragment");

@@ -8,9 +8,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/textViewTotal"
+        android:layout_gravity="right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/prompt_customer" />
         <!--android:textSize="@dimen/text_product_label_size" />-->
-    <Spinner
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerCustomer"
@@ -22,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="@string/prompt_pricelist" />
         <!--android:textSize="@dimen/text_product_label_size" />-->
-    <Spinner
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerPricelist"

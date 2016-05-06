@@ -17,13 +17,14 @@
         android:id="@+id/textViewSaleOrderNumber"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp" />
+        android:layout_marginTop="40dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:id="@+id/buttonNewSaleOrder"
-        android:text="@string/action_new_so"/>
+        android:text="@string/action_new_so"
+        android:layout_below="@+id/textViewSaleOrderNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
 </RelativeLayout>

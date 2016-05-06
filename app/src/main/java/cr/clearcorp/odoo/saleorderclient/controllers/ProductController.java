@@ -18,7 +18,7 @@ public class ProductController {
     public static ArrayList<Product> readAllProducts(String url, String database, Integer uid, String password) {
 
         ArrayList<HashMap<String, Object>> elements = GenericController.readAll(url, database, uid,
-                password, MODEL, asList(Collections.emptyList()),
+                password, MODEL, asList(asList(asList("sale_ok", "=", true))),
                 new HashMap() {{
                     put("fields", asList("id", "name", "code", "image_medium", "uom_id", "taxes_id"));
                 }});

@@ -65,13 +65,25 @@ public class SaleOrderLineEditFragment extends Fragment {
         Double price = bundle.getDouble("price", 0.0);
         Double total = qty * price;
 
-        this.editTextSaleQtyEdit = (EditText) view.findViewById(R.id.editTextSaleQtyEdit);
-        this.editTextSaleQtyEdit.setText(String.format("%.2f", qty));
+        if (qty % 1 == 0) {
+            this.editTextSaleQtyEdit = (EditText) view.findViewById(R.id.editTextSaleQtyEdit);
+            this.editTextSaleQtyEdit.setText(String.format("%d", qty.intValue()));
+        }
+        else {
+            this.editTextSaleQtyEdit = (EditText) view.findViewById(R.id.editTextSaleQtyEdit);
+            this.editTextSaleQtyEdit.setText(String.format("%.2f", qty));
+        }
 
         this.spinnerUoMEdit = (Spinner) view.findViewById(R.id.spinnerUoMEdit);
 
-        this.editTextSalePriceEdit = (EditText) view.findViewById(R.id.editTextSalePriceEdit);
-        this.editTextSalePriceEdit.setText(String.format("%.2f", price));
+        if (price % 1 == 0) {
+            this.editTextSalePriceEdit = (EditText) view.findViewById(R.id.editTextSalePriceEdit);
+            this.editTextSalePriceEdit.setText(String.format("%d", price.intValue()));
+        }
+        else {
+            this.editTextSalePriceEdit = (EditText) view.findViewById(R.id.editTextSalePriceEdit);
+            this.editTextSalePriceEdit.setText(String.format("%.2f", price));
+        }
 
         this.textViewSalePriceTotalEdit = (TextView) view.findViewById(R.id.textViewSalePriceTotalEdit);
         this.textViewSalePriceTotalEdit.setText(String.format("%.2f", total));

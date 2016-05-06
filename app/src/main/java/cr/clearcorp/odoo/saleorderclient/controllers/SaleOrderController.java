@@ -53,7 +53,6 @@ public class SaleOrderController {
                         put("warehouse_id", 1);
                         put("pricelist_id", saleOrder.getPricelist().getId());
                         put("picking_policy", "one");
-                        put("order_policy", "picking");
                         put("payment_term", type);
                         put("order_line", lines);
                     }}));

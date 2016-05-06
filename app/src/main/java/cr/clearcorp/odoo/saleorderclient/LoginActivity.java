@@ -381,15 +381,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onResponse(long l, Object o) {
-        Log.d("Successful Response", "Response from server.");
-        Intent intent = new Intent(this, SaleActivity.class);
-        intent.putExtra("url", this.url);
-        intent.putExtra("database", this.database);
-        intent.putExtra("password", this.password);
-        Integer uid = Integer.valueOf(o.toString());
-        intent.putExtra("uid", uid);
-        this.mHandler.sendEmptyMessage(XMLRPC_SUCCESFULL_LOGIN);
-        startActivity(intent);
+        try{
+            Log.d("Successful Response", "Response from server.");
+            Intent intent = new Intent(this, SaleActivity.class);
+            intent.putExtra("url", this.url);
+            intent.putExtra("database", this.database);
+            intent.putExtra("password", this.password);
+            Integer uid = Integer.valueOf(o.toString());
+            intent.putExtra("uid", uid);
+            this.mHandler.sendEmptyMessage(XMLRPC_SUCCESFULL_LOGIN);
+            startActivity(intent);
+        }
+        catch (Exception e){
+            this.mHandler.sendEmptyMessage(XMLRPC_SERVER_ERROR);
+        }
     }
 
     @Override

@@ -34,6 +34,7 @@
     <string name="prompt_qty">Cant</string>
     <string name="prompt_product">Producto</string>
     <string name="prompt_uom">UdM</string>
+    <string name="prompt_total">Total</string>
     <string name="action_new">Crear</string>
     <string name="dialog_title">Continuar</string>
     <string name="dialog_message">¿Estás seguro que deseas continuar?</string>
