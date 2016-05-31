@@ -31,6 +31,7 @@ SaleOrderLineEditFragment.OnActionListener {
     private String url;
     private Integer uid;
     private boolean editing;
+    private CreateSaleOrderTask saleOrderTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,12 @@ SaleOrderLineEditFragment.OnActionListener {
         inflater.inflate(R.menu.main_menu, menu);
         return true;
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saleOrderTask.cancel(true);
     }
 
     @Override
@@ -139,7 +146,7 @@ SaleOrderLineEditFragment.OnActionListener {
                         .show();
             }
             else {
-                CreateSaleOrderTask saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, so.getCustomer().getPaymentTermId());
+                saleOrderTask = new CreateSaleOrderTask(this.url, this.database, this.uid, this.password, so, so.getCustomer().getPaymentTermId());
                 saleOrderTask.execute();
             }
         }

@@ -30,6 +30,8 @@ public class ProductFragment extends Fragment {
     private String url;
     private Integer uid;
     private GridView productGrid;
+    private RetrieveProductIdsTask productTask;
+    private ComputePriceTask priceTask;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -51,8 +53,15 @@ public class ProductFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        RetrieveProductIdsTask productTask = new RetrieveProductIdsTask(url, database, uid, password);
+        productTask = new RetrieveProductIdsTask(url, database, uid, password);
         productTask.execute();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        productTask.cancel(true);
+        priceTask.cancel(true);
     }
 
     @Override
@@ -86,7 +95,7 @@ public class ProductFragment extends Fragment {
                         Snackbar.make(activity_view, R.string.error_no_pricelist, Snackbar.LENGTH_SHORT).show();
                     } else {
                         Product product = (Product) parent.getAdapter().getItem(position);
-                        ComputePriceTask priceTask = new ComputePriceTask(ProductFragment.this.url,
+                        priceTask = new ComputePriceTask(ProductFragment.this.url,
                                 ProductFragment.this.database, ProductFragment.this.uid,
                                 ProductFragment.this.password, product, pricelist.getId(), 1.0);
                         priceTask.execute();

@@ -39,6 +39,7 @@ public class SaleOrderLineEditFragment extends Fragment {
     private Button buttonSaleSaveEdit;
     private Button buttonSaleCancelEdit;
     private Button buttonSaleDeleteEdit;
+    private RetrieveUnitofMeasureIdsTask unitofMeasureTask;
 
     public SaleOrderLineEditFragment() {
         // Required empty public constructor
@@ -131,8 +132,14 @@ public class SaleOrderLineEditFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        RetrieveUnitofMeasureIdsTask unitofMeasureTask = new RetrieveUnitofMeasureIdsTask(url, database, uid, password, new UnitofMeasure(this.uomId, this.uomName));
+        unitofMeasureTask = new RetrieveUnitofMeasureIdsTask(url, database, uid, password, new UnitofMeasure(this.uomId, this.uomName));
         unitofMeasureTask.execute();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unitofMeasureTask.cancel(true);
     }
 
     @Override

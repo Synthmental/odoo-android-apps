@@ -40,6 +40,8 @@ public class SaleOrderLineFragment extends Fragment {
     private SearchableSpinner spinnerPricelist;
     private SaleOrderLineAdapter adapterLines;
     private ListView listViewLines;
+    private RetrieveCustomersIdsTask customerTask;
+    private RetrievePricelistIdsTask pricelistTask;
 
     public SaleOrderLineFragment() {
         // Required empty public constructor
@@ -103,10 +105,17 @@ public class SaleOrderLineFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        RetrieveCustomersIdsTask customerTask = new RetrieveCustomersIdsTask(url, database, uid, password);
+        customerTask = new RetrieveCustomersIdsTask(url, database, uid, password);
         customerTask.execute();
-        RetrievePricelistIdsTask pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
+        pricelistTask = new RetrievePricelistIdsTask(url, database, uid, password);
         pricelistTask.execute();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        customerTask.cancel(true);
+        pricelistTask.cancel(true);
     }
 
     @Override
