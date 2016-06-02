@@ -31,7 +31,7 @@ SaleOrderLineEditFragment.OnActionListener {
     private String url;
     private Integer uid;
     private boolean editing;
-    private CreateSaleOrderTask saleOrderTask;
+    private CreateSaleOrderTask saleOrderTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,12 @@ SaleOrderLineEditFragment.OnActionListener {
     @Override
     protected void onStop() {
         super.onStop();
-        saleOrderTask.cancel(true);
+        try {
+            saleOrderTask.cancel(true);
+        }
+        catch (Exception e){
+            Log.d("SaleActivity", "Object not instantiated");
+        }
     }
 
     @Override

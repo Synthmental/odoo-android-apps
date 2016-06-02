@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,13 @@ public class ProductFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        productTask.cancel(true);
-        priceTask.cancel(true);
+        try {
+            productTask.cancel(true);
+            priceTask.cancel(true);
+        }
+        catch (Exception e) {
+            Log.d("ProductFragement", "Object not instantiated");
+        }
     }
 
     @Override
