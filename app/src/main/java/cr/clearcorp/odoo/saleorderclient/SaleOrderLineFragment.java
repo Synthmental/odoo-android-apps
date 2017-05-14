@@ -136,6 +136,7 @@ public class SaleOrderLineFragment extends Fragment {
         }
     }
 
+
     private void LoadtextViewCustomer(ArrayList<Customer> customers) {
         ArrayAdapter<Customer> adapter;
         customers.add(0, new Customer(0, getResources().getString(R.string.prompt_customer_no_selection), 0));
