@@ -49,14 +49,15 @@ public class ProductFragment extends Fragment {
         this.uid = bundle.getInt("uid", 0);
         View view = inflater.inflate(R.layout.fragment_product, container, false);
         this.productGrid = (GridView) view.findViewById(R.id.gridViewProduct);
+        productTask = new RetrieveProductIdsTask(url, database, uid, password);
+        productTask.execute();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        productTask = new RetrieveProductIdsTask(url, database, uid, password);
-        productTask.execute();
+
     }
 
     @Override
