@@ -115,8 +115,9 @@ public class SaleOrderLineFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        customerTask.cancel(true);
-        pricelistTask.cancel(true);
+//        this.adapterLines.clear();
+//        this.adapterLines.notifyDataSetChanged();
+//        this.textViewTotal.setText("");
     }
 
     @Override
@@ -216,6 +217,7 @@ public class SaleOrderLineFragment extends Fragment {
     public void ClearTotal() {
         this.textViewTotal.setText("");
     }
+
 
     public Customer getCustomer() {
         return  (Customer) this.spinnerCustomer.getSelectedItem();
